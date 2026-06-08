@@ -340,6 +340,47 @@ jQuery(function ($) {
          * thường vô hại (là ảnh đại diện chung) nên vẫn được phép.
          */
         function collectByColor(variations, imageAttr, colorValue) {
+            // ── Bước 1: gom URL gallery theo từng màu tường minh ──────────────
+            var colorGalleries = {};
+            for (var i = 0; i < variations.length; i++) {
+                var _v   = variations[i];
+                var _val = _v.attributes[imageAttr];
+                if (!_val) continue; // bỏ "any" (empty string)
+                if (!colorGalleries[_val]) colorGalleries[_val] = {};
+                var _extras = _v.gallery_images || [];
+                for (var j = 0; j < _extras.length; j++) {
+                    if (_extras[j] && _extras[j].src) {
+                        colorGalleries[_val][_extras[j].full_src || _extras[j].src] = true;
+                    }
+                }
+            }
+
+            // ── Bước 2: phát hiện contamination bằng subset-check ─────────────
+            // Nếu gallery của màu A ⊆ gallery của màu B, thì ảnh màu A đã
+            // bị lẫn vào gallery của B (plugin lưu chung). Đánh dấu những
+            // ảnh đó để loại khỏi B. Không đụng gallery của A (clean).
+            var contamination = {};
+            var myGallery = colorGalleries[colorValue] || {};
+            for (var otherColor in colorGalleries) {
+                if (!colorGalleries.hasOwnProperty(otherColor)) continue;
+                if (otherColor === colorValue) continue;
+                var otherGallery = colorGalleries[otherColor];
+                var otherKeys    = Object.keys(otherGallery);
+                if (!otherKeys.length) continue;
+                // Kiểm tra otherGallery ⊆ myGallery
+                var isSubset = true;
+                for (var oi = 0; oi < otherKeys.length; oi++) {
+                    if (!myGallery[otherKeys[oi]]) { isSubset = false; break; }
+                }
+                if (isSubset) {
+                    // Gallery của màu khác đã leak vào gallery hiện tại → đánh dấu
+                    for (var oi = 0; oi < otherKeys.length; oi++) {
+                        contamination[otherKeys[oi]] = true;
+                    }
+                }
+            }
+
+            // ── Bước 3: thu thập ảnh ──────────────────────────────────────────
             var seen = {}, images = [];
             for (var i = 0; i < variations.length; i++) {
                 var v       = variations[i];
@@ -362,6 +403,7 @@ jQuery(function ($) {
                 for (var j = 0; j < extras.length; j++) {
                     if (!extras[j] || !extras[j].src) continue;
                     var ek = extras[j].full_src || extras[j].src;
+                    if (contamination[ek]) continue; // ảnh leak từ màu khác → bỏ qua
                     if (!seen[ek]) { seen[ek] = true; images.push(extras[j]); }
                 }
             }
@@ -396,7 +438,27 @@ jQuery(function ($) {
                 if (variations && variations.length) {
                     // Inline mode: gom theo màu
                     var imageAttr = getImageAttr(variations);
-                    if (!imageAttr) return;
+                    if (!imageAttr) {
+                        // Không detect được attribute màu (ví dụ sản phẩm chỉ có Size).
+                        // Chỉ update gallery nếu variation có ảnh KHÁC với gallery gốc —
+                        // tránh flash/reset vô ích khi chọn size mà ảnh không đổi.
+                        var varSrc = variation.image && (variation.image.full_src || variation.image.src);
+                        var origFirstSrc = $gallery.find('.saltlux-gallery-img').first().attr('src');
+                        var hasExtras = variation.gallery_images && variation.gallery_images.length > 0;
+                        if (!varSrc || (!hasExtras && varSrc === origFirstSrc)) return;
+
+                        var imgs = [], seen = {};
+                        var add = function (img) {
+                            if (!img || !img.src) return;
+                            var k = img.full_src || img.src;
+                            if (!seen[k]) { seen[k] = true; imgs.push(img); }
+                        };
+                        add(variation.image);
+                        var extras = variation.gallery_images || [];
+                        for (var j = 0; j < extras.length; j++) add(extras[j]);
+                        if (imgs.length) applyVariantGallery(imgs);
+                        return;
+                    }
                     var colorVal = $form.find('select[name="' + imageAttr + '"]').val();
                     if (!colorVal) return;
                     var imgs = collectByColor(variations, imageAttr, colorVal);

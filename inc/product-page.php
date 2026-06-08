@@ -41,6 +41,57 @@ function sv2_enqueue_product_page_script() {
     }
 }
 
+// WooCommerce 9.x dùng wp.hooks + wp.template bên trong add-to-cart-variation.min.js
+// nhưng không khai báo đúng dependency → TypeError khi script load trước wp-util/wp-hooks.
+// Tìm handle bằng URL pattern (robust hơn đoán tên), patch deps, và inject polyfill
+// trực tiếp trước script tag để đảm bảo window.wp.template luôn tồn tại khi cần.
+add_action( 'wp_enqueue_scripts', 'sv2_fix_wc_variation_wp_deps', 999 );
+function sv2_fix_wc_variation_wp_deps() {
+    if ( ! is_product() ) return;
+
+    wp_enqueue_script( 'wp-hooks' );
+    wp_enqueue_script( 'wp-util' );
+
+    // Polyfill tối giản: đảm bảo wp.template không undefined.
+    // wp-util (nếu load đúng thứ tự) sẽ overwrite bằng implementation thật.
+    $polyfill = 'window.wp=window.wp||{};'
+              . 'window.wp.template=window.wp.template||function(id){'
+              .   'return function(data){'
+              .     'try{'
+              .       'var el=document.getElementById("tmpl-"+id);'
+              .       'if(el&&typeof _!=="undefined")'
+              .         'return _.template(el.innerHTML,{variable:"data",evaluate:/<#([\\s\\S]+?)#>/g,interpolate:/\\{\\{\\{([\\s\\S]+?)\\}\\}\\}/g,escape:/\\{\\{([^}]+)\\}\\}/g})(data);'
+              .     '}catch(e){}'
+              .     'return "";'
+              .   '};'
+              . '};';
+
+    global $wp_scripts;
+
+    // Tìm script handle bằng URL pattern — không đoán tên handle
+    $var_handle = null;
+    foreach ( $wp_scripts->registered as $h => $s ) {
+        if ( strpos( $s->src, 'add-to-cart-variation' ) !== false ) {
+            $var_handle = $h;
+            break;
+        }
+    }
+
+    if ( $var_handle ) {
+        // Patch deps để WordPress output wp-hooks + wp-util TRƯỚC script này
+        foreach ( array( 'wp-hooks', 'wp-util' ) as $dep ) {
+            if ( ! in_array( $dep, $wp_scripts->registered[ $var_handle ]->deps, true ) ) {
+                $wp_scripts->registered[ $var_handle ]->deps[] = $dep;
+            }
+        }
+        // Inject polyfill ngay trước script tag — belt-and-suspenders
+        wp_add_inline_script( $var_handle, $polyfill, 'before' );
+    } else {
+        // Handle không tìm thấy → inject sớm sau jQuery
+        wp_add_inline_script( 'jquery-core', $polyfill, 'after' );
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Sắp xếp size theo thứ tự chuẩn quần áo: XS S M L XL XXL O
 // Hook 1 – woocommerce_get_product_terms: cover tất cả swatch plugin dùng wc_get_product_terms()
