@@ -42,6 +42,44 @@ function sv2_enqueue_product_page_script() {
 }
 
 // ---------------------------------------------------------------------------
+// Sắp xếp size attribute theo thứ tự chuẩn quần áo (XS S M L XL XXL O)
+// ---------------------------------------------------------------------------
+add_filter( 'woocommerce_dropdown_variation_attribute_options_args', 'sv2_sort_size_options', 20 );
+function sv2_sort_size_options( $args ) {
+    if ( empty( $args['options'] ) || empty( $args['product'] ) || empty( $args['attribute'] ) ) {
+        return $args;
+    }
+
+    // Thứ tự chuẩn — thêm/bỏ kích thước tùy sản phẩm
+    $order = array( 'XS' => 0, 'S' => 1, 'M' => 2, 'L' => 3, 'XL' => 4, 'XXL' => 5, '2XL' => 6, '3XL' => 7, 'O' => 8, 'OS' => 9, 'ONE SIZE' => 10 );
+
+    // Lấy terms đầy đủ để map slug → name
+    $terms = wc_get_product_terms( $args['product']->get_id(), $args['attribute'], array( 'fields' => 'all' ) );
+    if ( empty( $terms ) || is_wp_error( $terms ) ) return $args;
+
+    $slug_to_order = array();
+    foreach ( $terms as $term ) {
+        $name_upper = strtoupper( trim( $term->name ) );
+        $slug_to_order[ $term->slug ] = isset( $order[ $name_upper ] ) ? $order[ $name_upper ] : 999;
+    }
+
+    // Chỉ sort khi tất cả options đều được nhận diện là size (tránh sort attribute không liên quan)
+    foreach ( $args['options'] as $slug ) {
+        if ( ! isset( $slug_to_order[ $slug ] ) || $slug_to_order[ $slug ] === 999 ) {
+            return $args; // có size không nhận diện được → giữ nguyên thứ tự
+        }
+    }
+
+    $sorted = $args['options'];
+    usort( $sorted, function ( $a, $b ) use ( $slug_to_order ) {
+        return ( $slug_to_order[ $a ] ?? 999 ) - ( $slug_to_order[ $b ] ?? 999 );
+    } );
+    $args['options'] = $sorted;
+
+    return $args;
+}
+
+// ---------------------------------------------------------------------------
 // Thêm gallery_images vào dữ liệu variation (WC inline JS + AJAX fallback)
 // ---------------------------------------------------------------------------
 add_filter( 'woocommerce_available_variation', function( $data, $product, $variation ) {
