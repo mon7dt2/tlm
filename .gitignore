@@ -1,0 +1,28 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WordPress / WooCommerce uploads & cache
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+*.min.js
+*.min.css
+
+# Environment / secrets
+.env
+.env.*
+wp-config.php
