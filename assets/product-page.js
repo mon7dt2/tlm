@@ -183,27 +183,6 @@ jQuery(function ($) {
         // fancybox group name comes from the first link's data-fancybox
         var fancyGroup = $gallery.find('.saltlux-gallery-link').first().data('fancybox') || 'saltlux-gallery-variant';
 
-        // Pre-extract product gallery images from original DOM (used as fallback)
-        var origImages = (function () {
-            var imgs = [], seen = {};
-            var $tmp = $('<div>').html(origHTML);
-            $tmp.find('.saltlux-gallery-item').each(function () {
-                var $link = $(this).find('.saltlux-gallery-link');
-                var $img  = $(this).find('.saltlux-gallery-img');
-                if (!$img.length) return;
-                var fullSrc = $link.attr('href') || $img.attr('src') || '';
-                if (!fullSrc || seen[fullSrc]) return;
-                seen[fullSrc] = true;
-                imgs.push({
-                    src     : $img.attr('src')    || '',
-                    srcset  : $img.attr('srcset') || '',
-                    sizes   : $img.attr('sizes')  || '',
-                    alt     : $img.attr('alt')    || '',
-                    full_src: fullSrc,
-                });
-            });
-            return imgs;
-        }());
 
         function esc(str) {
             return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -364,22 +343,6 @@ jQuery(function ($) {
 
         function renderColorGallery(images) {
             if (!images.length) return;
-
-            // Fallback: WooCommerce native chỉ có 1 ảnh/variation.
-            // Khi tất cả cùng màu share cùng 1 ảnh, bổ sung gallery gốc của product
-            // (ảnh product-level đã render sẵn bởi PHP) để gallery không trống.
-            if (images.length === 1 && origImages.length > 1) {
-                var varImg = images[0];
-                var seen   = {};
-                seen[varImg.full_src || varImg.src] = true;
-                var combined = [varImg];
-                for (var i = 0; i < origImages.length; i++) {
-                    var k = origImages[i].full_src || origImages[i].src;
-                    if (!seen[k]) { seen[k] = true; combined.push(origImages[i]); }
-                }
-                images = combined;
-            }
-
             applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
         }
 
