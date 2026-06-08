@@ -274,46 +274,47 @@ jQuery(function ($) {
         }
 
         /**
-         * Gom ảnh từ TẤT CẢ variations khớp với `chosen` (màu + bất kỳ size).
-         * `chosen` = { 'attribute_pa_color': 'xanh-la', 'attribute_pa_size': '' }
-         * Attribute rỗng ('') = chưa chọn → bỏ qua khi so khớp.
-         * Trả về mảng image objects đã dedup theo src.
+         * Tự động phát hiện attribute nào là "màu sắc":
+         * attribute đó phải có ít nhất 2 giá trị khác nhau dẫn đến 2 src ảnh khác nhau.
+         * Trả về tên attribute (vd: 'attribute_pa_mau') hoặc null nếu không tìm thấy.
          */
-        function collectColorImages($form, chosen) {
-            var variations = $form.data('product_variations');
-            if (!variations || !variations.length) return [];
-
-            // Xác định key màu sắc: attribute có tên chứa "color" hoặc "colour" hoặc "mau"
-            // Nếu không tìm thấy, dùng toàn bộ chosen (fallback).
-            var colorKey = null;
-            for (var k in chosen) {
-                if (chosen.hasOwnProperty(k) && /colou?r|mau|color/i.test(k)) {
-                    colorKey = k; break;
+        function detectImageAttr(variations) {
+            var attrs = {};
+            for (var i = 0; i < variations.length; i++) {
+                for (var k in variations[i].attributes) {
+                    if (variations[i].attributes.hasOwnProperty(k)) attrs[k] = true;
                 }
             }
-
-            // Tạo bộ lọc: chỉ match theo thuộc tính màu (bỏ qua size/attributes khác)
-            var filterKeys = {};
-            if (colorKey && chosen[colorKey]) {
-                filterKeys[colorKey] = chosen[colorKey];
-            } else {
-                // fallback: dùng mọi attribute đã chọn
-                for (var key in chosen) {
-                    if (chosen.hasOwnProperty(key) && chosen[key]) filterKeys[key] = chosen[key];
+            for (var attr in attrs) {
+                if (!attrs.hasOwnProperty(attr)) continue;
+                var valToImg = {};
+                for (var i = 0; i < variations.length; i++) {
+                    var val = variations[i].attributes[attr];
+                    var src = variations[i].image && variations[i].image.src;
+                    if (!val || !src) continue;   // bỏ qua "any" ('') và variation không có ảnh
+                    valToImg[val] = src;
                 }
+                // Nếu có ≥ 2 giá trị với src ảnh khác nhau → đây là attribute màu
+                var uniqueImgs = {};
+                for (var v in valToImg) {
+                    if (valToImg.hasOwnProperty(v)) uniqueImgs[valToImg[v]] = true;
+                }
+                if (Object.keys(uniqueImgs).length > 1) return attr;
             }
+            return null;
+        }
 
+        /**
+         * Gom tất cả ảnh (main + gallery_images) của mọi variation có cùng giá trị
+         * của imageAttr, dedup theo src.
+         */
+        function collectByAttr(variations, imageAttr, colorValue) {
             var seenSrc = {}, allImages = [];
             for (var i = 0; i < variations.length; i++) {
-                var v = variations[i];
-                var ok = true;
-                for (var fk in filterKeys) {
-                    if (!filterKeys.hasOwnProperty(fk)) continue;
-                    if (v.attributes[fk] !== '' && v.attributes[fk] !== filterKeys[fk]) {
-                        ok = false; break;
-                    }
-                }
-                if (!ok) continue;
+                var v   = variations[i];
+                var val = v.attributes[imageAttr];
+                // val === '' nghĩa là "any" → vẫn match
+                if (val !== '' && val !== colorValue) continue;
 
                 if (v.image && v.image.src && !seenSrc[v.image.src]) {
                     seenSrc[v.image.src] = true;
@@ -330,33 +331,45 @@ jQuery(function ($) {
             return allImages;
         }
 
-        function applyColorGallery($form, chosen) {
-            var images = collectColorImages($form, chosen);
-            if (!images.length) return;
-            applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
-        }
-
         function bindVariationForm($form) {
             $form.off('found_variation.sv2 reset_data.sv2 change.sv2gallery');
 
             $form.on('change.sv2gallery', 'select[name^="attribute_"]', function () {
-                var chosen = {}, anySelected = false;
-                $form.find('select[name^="attribute_"]').each(function () {
-                    chosen[this.name] = this.value;
-                    if (this.value) anySelected = true;
-                });
-                if (!anySelected) { restoreGallery(); return; }
-                applyColorGallery($form, chosen);
+                var variations = $form.data('product_variations');
+                if (!variations || !variations.length) return;
+
+                var imageAttr = detectImageAttr(variations);
+
+                // Chỉ update gallery khi đúng attribute màu thay đổi;
+                // nếu không detect được (imageAttr null), bỏ qua.
+                if (!imageAttr) return;
+                if ($(this).attr('name') !== imageAttr) return;
+
+                var colorValue = $(this).val();
+                if (!colorValue) { restoreGallery(); return; }
+
+                var images = collectByAttr(variations, imageAttr, colorValue);
+                if (images.length) {
+                    applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
+                }
             });
 
-            // found_variation cũng gom theo màu thay vì dùng đơn lẻ variation
+            // found_variation: vẫn update theo màu, không dùng variation đơn lẻ
             $form.on('found_variation.sv2', function (e, variation) {
                 if (!variation) return;
-                var chosen = {};
-                $form.find('select[name^="attribute_"]').each(function () {
-                    chosen[this.name] = this.value;
-                });
-                applyColorGallery($form, chosen);
+                var variations = $form.data('product_variations');
+                if (!variations || !variations.length) return;
+
+                var imageAttr = detectImageAttr(variations);
+                if (!imageAttr) return;
+
+                var colorValue = $form.find('select[name="' + imageAttr + '"]').val();
+                if (!colorValue) return;
+
+                var images = collectByAttr(variations, imageAttr, colorValue);
+                if (images.length) {
+                    applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
+                }
             });
 
             $form.on('reset_data.sv2', function () {
