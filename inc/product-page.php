@@ -45,9 +45,50 @@ function sv2_enqueue_product_page_script() {
 // Thêm gallery_images vào dữ liệu variation (WC inline JS + AJAX fallback)
 // ---------------------------------------------------------------------------
 add_filter( 'woocommerce_available_variation', function( $data, $product, $variation ) {
+
+    // ── 1. Override ảnh chính sang size 'large' (WC mặc định dùng thumbnail nhỏ) ──
+    $main_id = $variation->get_image_id();
+    if ( $main_id ) {
+        $large = wp_get_attachment_image_src( $main_id, 'large' );
+        $full  = wp_get_attachment_image_src( $main_id, 'full' );
+        if ( $large ) {
+            $data['image']['src']    = $large[0];
+            $data['image']['srcset'] = (string) ( wp_get_attachment_image_srcset( $main_id, 'large' ) ?: '' );
+            $data['image']['sizes']  = (string) ( wp_get_attachment_image_sizes( $main_id, 'large' ) ?: '' );
+        }
+        if ( $full ) {
+            $data['image']['full_src'] = $full[0];
+        }
+    }
+
+    // ── 2. Gallery ảnh phụ: native WC trước, sau đó thử các meta key plugin phổ biến ──
+    $var_id = $variation->get_id();
+
+    // WC native: _product_image_gallery (dạng chuỗi IDs cách nhau dấu phẩy)
+    $ids = $variation->get_gallery_image_ids();
+
+    // Thử các meta key của plugin variation gallery phổ biến nếu WC native rỗng
+    if ( empty( $ids ) ) {
+        $plugin_keys = array(
+            'woo_variation_gallery_images',  // WooCommerce Variation Gallery (free)
+            'variation_image_gallery',       // Additional Variation Images
+            '_pwwg_gallery_images',          // Pimwick Variation Gallery
+            '_wc_additional_variation_images', // Additional Variation Images Pro
+        );
+        foreach ( $plugin_keys as $meta_key ) {
+            $raw = get_post_meta( $var_id, $meta_key, true );
+            if ( ! $raw ) continue;
+            $ids = is_array( $raw )
+                ? array_map( 'intval', $raw )
+                : array_filter( array_map( 'intval', explode( ',', $raw ) ) );
+            if ( ! empty( $ids ) ) break;
+        }
+    }
+
     $gallery = array();
-    $ids     = $variation->get_gallery_image_ids();
-    foreach ( $ids as $id ) {
+    foreach ( (array) $ids as $id ) {
+        $id = (int) $id;
+        if ( ! $id ) continue;
         $large = wp_get_attachment_image_src( $id, 'large' );
         $full  = wp_get_attachment_image_src( $id, 'full' );
         if ( ! $large ) continue;

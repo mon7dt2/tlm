@@ -273,102 +273,123 @@ jQuery(function ($) {
             }
         }
 
+        // Cache: tên attribute màu per-form (undefined = chưa tính, null = không có)
+        var _imageAttr;
+
         /**
-         * Tự động phát hiện attribute nào là "màu sắc":
-         * attribute đó phải có ít nhất 2 giá trị khác nhau dẫn đến 2 src ảnh khác nhau.
-         * Trả về tên attribute (vd: 'attribute_pa_mau') hoặc null nếu không tìm thấy.
+         * Tự động detect attribute nào drive ảnh khác nhau (= attribute màu).
+         * Tiêu chí: có ≥2 giá trị khác nhau → ≥2 src ảnh khác nhau.
+         * Kết quả được cache để không tính lại mỗi event.
          */
-        function detectImageAttr(variations) {
+        function getImageAttr(variations) {
+            if (_imageAttr !== undefined) return _imageAttr;
+
             var attrs = {};
             for (var i = 0; i < variations.length; i++) {
                 for (var k in variations[i].attributes) {
                     if (variations[i].attributes.hasOwnProperty(k)) attrs[k] = true;
                 }
             }
+
+            _imageAttr = null; // fallback: không tìm thấy
             for (var attr in attrs) {
                 if (!attrs.hasOwnProperty(attr)) continue;
                 var valToImg = {};
                 for (var i = 0; i < variations.length; i++) {
                     var val = variations[i].attributes[attr];
                     var src = variations[i].image && variations[i].image.src;
-                    if (!val || !src) continue;   // bỏ qua "any" ('') và variation không có ảnh
+                    if (!val || !src) continue; // bỏ qua "any" ('') và variation không ảnh
                     valToImg[val] = src;
                 }
-                // Nếu có ≥ 2 giá trị với src ảnh khác nhau → đây là attribute màu
                 var uniqueImgs = {};
                 for (var v in valToImg) {
                     if (valToImg.hasOwnProperty(v)) uniqueImgs[valToImg[v]] = true;
                 }
-                if (Object.keys(uniqueImgs).length > 1) return attr;
+                if (Object.keys(uniqueImgs).length > 1) {
+                    _imageAttr = attr;
+                    break;
+                }
             }
-            return null;
+            return _imageAttr;
         }
 
         /**
-         * Gom tất cả ảnh (main + gallery_images) của mọi variation có cùng giá trị
-         * của imageAttr, dedup theo src.
+         * Gom tất cả ảnh (main + gallery_images) từ mọi variation cùng màu.
+         * Dedup theo full_src để tránh trùng lặp.
          */
-        function collectByAttr(variations, imageAttr, colorValue) {
-            var seenSrc = {}, allImages = [];
+        function collectByColor(variations, imageAttr, colorValue) {
+            var seen = {}, images = [];
             for (var i = 0; i < variations.length; i++) {
                 var v   = variations[i];
                 var val = v.attributes[imageAttr];
-                // val === '' nghĩa là "any" → vẫn match
-                if (val !== '' && val !== colorValue) continue;
+                if (val !== '' && val !== colorValue) continue; // '' = "any" → match hết
 
-                if (v.image && v.image.src && !seenSrc[v.image.src]) {
-                    seenSrc[v.image.src] = true;
-                    allImages.push(v.image);
+                // Ảnh chính của variation
+                if (v.image && v.image.src) {
+                    var key = v.image.full_src || v.image.src;
+                    if (!seen[key]) { seen[key] = true; images.push(v.image); }
                 }
+                // Ảnh gallery phụ (từ plugin variation gallery)
                 var extras = v.gallery_images || [];
                 for (var j = 0; j < extras.length; j++) {
-                    if (extras[j] && extras[j].src && !seenSrc[extras[j].src]) {
-                        seenSrc[extras[j].src] = true;
-                        allImages.push(extras[j]);
-                    }
+                    if (!extras[j] || !extras[j].src) continue;
+                    var ekey = extras[j].full_src || extras[j].src;
+                    if (!seen[ekey]) { seen[ekey] = true; images.push(extras[j]); }
                 }
             }
-            return allImages;
+            return images;
+        }
+
+        function renderColorGallery(images) {
+            if (!images.length) return;
+            applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
         }
 
         function bindVariationForm($form) {
+            _imageAttr = undefined; // reset cache khi bind lại
             $form.off('found_variation.sv2 reset_data.sv2 change.sv2gallery');
 
+            // ── change: chỉ react khi đúng attribute màu thay đổi ──
             $form.on('change.sv2gallery', 'select[name^="attribute_"]', function () {
                 var variations = $form.data('product_variations');
-                if (!variations || !variations.length) return;
+                if (!variations || !variations.length) return; // AJAX mode → dùng found_variation
 
-                var imageAttr = detectImageAttr(variations);
-
-                // Chỉ update gallery khi đúng attribute màu thay đổi;
-                // nếu không detect được (imageAttr null), bỏ qua.
+                var imageAttr = getImageAttr(variations);
                 if (!imageAttr) return;
-                if ($(this).attr('name') !== imageAttr) return;
+                if ($(this).attr('name') !== imageAttr) return; // size/attribute khác → bỏ qua
 
                 var colorValue = $(this).val();
                 if (!colorValue) { restoreGallery(); return; }
 
-                var images = collectByAttr(variations, imageAttr, colorValue);
-                if (images.length) {
-                    applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
-                }
+                renderColorGallery(collectByColor(variations, imageAttr, colorValue));
             });
 
-            // found_variation: vẫn update theo màu, không dùng variation đơn lẻ
+            // ── found_variation: ưu tiên collect theo màu từ inline data ──
+            // Nếu là AJAX mode (no inline data), fallback dùng images từ variation object
             $form.on('found_variation.sv2', function (e, variation) {
                 if (!variation) return;
                 var variations = $form.data('product_variations');
-                if (!variations || !variations.length) return;
 
-                var imageAttr = detectImageAttr(variations);
-                if (!imageAttr) return;
-
-                var colorValue = $form.find('select[name="' + imageAttr + '"]').val();
-                if (!colorValue) return;
-
-                var images = collectByAttr(variations, imageAttr, colorValue);
-                if (images.length) {
-                    applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
+                if (variations && variations.length) {
+                    // Inline mode: gom đủ ảnh cùng màu
+                    var imageAttr = getImageAttr(variations);
+                    if (!imageAttr) return;
+                    var colorValue = $form.find('select[name="' + imageAttr + '"]').val();
+                    if (!colorValue) return;
+                    renderColorGallery(collectByColor(variations, imageAttr, colorValue));
+                } else {
+                    // AJAX mode (>30 variations): chỉ có data của variation hiện tại
+                    var imgs = [];
+                    var seen = {};
+                    var addImg = function(img) {
+                        if (!img || !img.src) return;
+                        var k = img.full_src || img.src;
+                        if (!seen[k]) { seen[k] = true; imgs.push(img); }
+                    };
+                    addImg(variation.image);
+                    var extras = variation.gallery_images || [];
+                    for (var j = 0; j < extras.length; j++) addImg(extras[j]);
+                    if (imgs.length) renderColorGallery(imgs);
                 }
             });
 
