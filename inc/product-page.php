@@ -191,6 +191,8 @@ function sv2_get_variation_gallery_ids( $var_id, $variation ) {
     //    fail wp_attachment_is_image vì không phải attachment với MIME image).
     //
     //    Các meta key WC system được skip để tiết kiệm thời gian.
+    //    Các meta key kết thúc bằng số ID của variation KHÁC (e.g. _gallery_20162
+    //    trên variation #20166) → bỏ qua, đây là dữ liệu lưu chéo của plugin.
     $skip_keys = array(
         '_sku', '_price', '_regular_price', '_sale_price', '_stock',
         '_manage_stock', '_backorders', '_weight', '_length', '_width', '_height',
@@ -202,6 +204,13 @@ function sv2_get_variation_gallery_ids( $var_id, $variation ) {
     foreach ( get_post_meta( $var_id ) as $meta_key => $meta_arr ) {
         if ( strpos( $meta_key, 'attribute_' ) === 0 ) continue;
         if ( in_array( $meta_key, $skip_keys, true ) ) continue;
+
+        // Bỏ qua key có dạng *_<id> nếu <id> là ID của variation KHÁC
+        // Ví dụ: _gallery_20162 trên variation #20166 → dữ liệu chéo của plugin
+        if ( preg_match( '/[_\-](\d{4,})$/', $meta_key, $id_m )
+             && (int) $id_m[1] !== $var_id ) {
+            continue;
+        }
 
         $raw = maybe_unserialize( $meta_arr[0] ?? '' );
 

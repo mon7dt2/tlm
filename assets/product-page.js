@@ -327,17 +327,37 @@ jQuery(function ($) {
 
         /* ── collect images for a color value ─────────────────────────────── */
 
+        /**
+         * Thu thập ảnh main + gallery_images cho một màu sắc cụ thể.
+         *
+         * Phân biệt hai loại variation:
+         *  - Exact match (val === colorValue): lấy cả main image lẫn gallery_images
+         *  - "Any" match (val === ''): CHỈ lấy main image, KHÔNG lấy gallery_images
+         *
+         * Lý do: gallery_images của "any color" variation có thể là ảnh của MỘT màu
+         * cụ thể (ví dụ Trắng O được admin đặt thành "any color, size O") và nếu lấy
+         * sẽ xuất hiện cho tất cả màu → lẫn ảnh. Main image của "any" variation
+         * thường vô hại (là ảnh đại diện chung) nên vẫn được phép.
+         */
         function collectByColor(variations, imageAttr, colorValue) {
             var seen = {}, images = [];
             for (var i = 0; i < variations.length; i++) {
-                var v   = variations[i];
-                var val = v.attributes[imageAttr];
-                if (val !== '' && val !== colorValue) continue; // '' = "any" → match
+                var v       = variations[i];
+                var val     = v.attributes[imageAttr];
+                var isExact = (val === colorValue);
+                var isAny   = (val === '');
 
+                if (!isExact && !isAny) continue; // khác màu → bỏ qua
+
+                // Main image: lấy từ cả exact lẫn "any"
                 if (v.image && v.image.src) {
                     var k = v.image.full_src || v.image.src;
                     if (!seen[k]) { seen[k] = true; images.push(v.image); }
                 }
+
+                // Gallery images: CHỈ lấy từ exact-color variation
+                if (!isExact) continue;
+
                 var extras = v.gallery_images || [];
                 for (var j = 0; j < extras.length; j++) {
                     if (!extras[j] || !extras[j].src) continue;
