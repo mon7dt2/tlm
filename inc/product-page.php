@@ -42,19 +42,51 @@ function sv2_enqueue_product_page_script() {
 }
 
 // ---------------------------------------------------------------------------
-// Sắp xếp size attribute theo thứ tự chuẩn quần áo (XS S M L XL XXL O)
-// Áp dụng cho cả <select> native lẫn swatch plugin (đều dùng options array này)
+// Sắp xếp size theo thứ tự chuẩn quần áo: XS S M L XL XXL O
+// Hook 1 – woocommerce_get_product_terms: cover tất cả swatch plugin dùng wc_get_product_terms()
+// Hook 2 – woocommerce_dropdown_variation_attribute_options_args: fallback cho select native
 // ---------------------------------------------------------------------------
+
+/** Map tên size → thứ tự sort (so sánh case-insensitive). */
+function sv2_size_order() {
+    return array(
+        'XS'       => 0, 'S'  => 1, 'M'  => 2,
+        'L'        => 3, 'XL' => 4, 'XXL' => 5,
+        '2XL'      => 6, '3XL' => 7,
+        'O'        => 8, 'OS' => 9, 'ONE SIZE' => 10,
+    );
+}
+
+// Hook vào wc_get_product_terms() — được hầu hết swatch plugin gọi
+add_filter( 'woocommerce_get_product_terms', 'sv2_sort_product_size_terms', 10, 4 );
+function sv2_sort_product_size_terms( $terms, $product_id, $taxonomy, $args ) {
+    if ( empty( $terms ) || ! is_array( $terms ) || ! ( $terms[0] instanceof WP_Term ) ) {
+        return $terms;
+    }
+    $order = sv2_size_order();
+    // Chỉ sort nếu ít nhất 1 term nhận diện được là size
+    $has_size = false;
+    foreach ( $terms as $term ) {
+        if ( isset( $order[ strtoupper( trim( $term->name ) ) ] ) ) {
+            $has_size = true;
+            break;
+        }
+    }
+    if ( ! $has_size ) return $terms;
+
+    usort( $terms, function ( $a, $b ) use ( $order ) {
+        $ao = $order[ strtoupper( trim( $a->name ) ) ] ?? 999;
+        $bo = $order[ strtoupper( trim( $b->name ) ) ] ?? 999;
+        return $ao - $bo;
+    } );
+    return $terms;
+}
+
 add_filter( 'woocommerce_dropdown_variation_attribute_options_args', 'sv2_sort_size_options', 20 );
 function sv2_sort_size_options( $args ) {
     if ( empty( $args['options'] ) ) return $args;
 
-    // Thứ tự chuẩn (so sánh theo tên hiển thị, case-insensitive)
-    $order = array(
-        'XS' => 0, 'S' => 1, 'M' => 2, 'L' => 3,
-        'XL' => 4, 'XXL' => 5, '2XL' => 6, '3XL' => 7,
-        'O' => 8, 'OS' => 9, 'ONE SIZE' => 10,
-    );
+    $order = sv2_size_order();
 
     // options có thể là: array of WP_Term | array of slugs (string) | array of names (string)
     // Chuẩn hoá về dạng [ index => label_for_sort ]
@@ -118,22 +150,29 @@ function sv2_sort_size_options( $args ) {
 // ---------------------------------------------------------------------------
 function sv2_get_variation_gallery_ids( $var_id, $variation ) {
 
-    // 1. WC native (đọc _product_image_gallery trên variation post)
+    // 1. WC native (variation->get_gallery_image_ids đọc _product_image_gallery)
     $ids = $variation->get_gallery_image_ids();
     if ( ! empty( $ids ) ) return $ids;
 
-    // 2. Danh sách meta key của các plugin gallery phổ biến
+    // 2. Meta key cụ thể của các plugin gallery phổ biến
     $known_keys = array(
-        'woo_variation_gallery_images',       // WooCommerce Variation Gallery (ThemeComplete & others)
-        '_product_image_gallery',             // WC native key nếu plugin ghi trực tiếp
-        'variation_image_gallery',            // Additional Variation Images
-        '_pwwg_gallery_images',               // Pimwick
-        '_wc_additional_variation_images',    // Iconic / generic
-        'yith_wc_variation_gallery_images',   // YITH
-        'wcvi_image_gallery',                 // WooCommerce Variation Images
-        'codeixer_variation_gallery',         // CodeIxer swatch plugin
+        'woo_variation_gallery_images',        // WooCommerce Variation Gallery (ThemeComplete / ILLID)
+        '_product_image_gallery',              // WC native nếu plugin ghi trực tiếp
+        'variation_image_gallery',             // Additional Variation Images (nhiều plugin)
+        '_pwwg_gallery_images',                // Pimwick
+        '_wc_additional_variation_images',     // Iconic / generic
+        'yith_wc_variation_gallery_images',    // YITH
+        'wcvi_image_gallery',                  // WooCommerce Variation Images
+        'codeixer_variation_gallery',          // CodeIxer swatch
         '_additional_variation_images',
         'variation_gallery_images',
+        '_wgv_image_ids',                      // WooCommerce Product Variation Gallery
+        'raq_product_image_ids',               // ThemeIsle variant
+        '_raq_product_image_ids',
+        'polycon_gallery_ids',                 // PolyGon Variation Image Gallery
+        'wvg_gallery',                         // WooCommerce Variation Gallery Pro
+        'mv_variation_images',                 // Meow Variation
+        '_av_gallery_images',
     );
 
     foreach ( $known_keys as $key ) {
@@ -142,42 +181,43 @@ function sv2_get_variation_gallery_ids( $var_id, $variation ) {
         $ids = is_array( $raw )
             ? array_values( array_filter( array_map( 'intval', $raw ) ) )
             : array_values( array_filter( array_map( 'intval', explode( ',', (string) $raw ) ) ) );
-        if ( ! empty( $ids ) ) return $ids;
+        if ( ! empty( $ids ) && min( $ids ) > 0 ) return $ids;
     }
 
-    // 3. Auto-detect: duyệt toàn bộ meta, tìm key nào chứa mảng integer dương
-    //    (= khả năng cao là mảng attachment IDs của plugin bất kỳ)
-    static $skip_keys = array(
-        '_price', '_regular_price', '_sale_price', '_sku', '_thumbnail_id',
-        '_stock', '_manage_stock', '_weight', '_length', '_width', '_height',
-        '_edit_lock', '_edit_last', '_tax_status', '_tax_class', '_backorders',
-        '_sold_individually', '_virtual', '_downloadable', '_shipping_class_id',
-        '_variation_description', '_downloadable_files',
+    // 3. Auto-detect toàn diện: quét TẤT CẢ meta key (không lọc theo keyword).
+    //    Điều kiện xác nhận: giá trị là mảng / CSV của các positive integer VÀ
+    //    phần tử đầu tiên phải là attachment ảnh hợp lệ (wp_attachment_is_image).
+    //    Điều này loại bỏ false-positive như product_pairs_with (product IDs sẽ
+    //    fail wp_attachment_is_image vì không phải attachment với MIME image).
+    //
+    //    Các meta key WC system được skip để tiết kiệm thời gian.
+    $skip_keys = array(
+        '_sku', '_price', '_regular_price', '_sale_price', '_stock',
+        '_manage_stock', '_backorders', '_weight', '_length', '_width', '_height',
+        '_virtual', '_downloadable', '_tax_class', '_thumbnail_id',
+        '_variation_description', '_edit_lock', '_edit_last',
+        '_wp_attachment_metadata', '_wp_attached_file',
     );
 
     foreach ( get_post_meta( $var_id ) as $meta_key => $meta_arr ) {
-        if ( in_array( $meta_key, $skip_keys, true ) ) continue;
-        // Bỏ qua meta key của attributes (attribute_pa_*)
         if ( strpos( $meta_key, 'attribute_' ) === 0 ) continue;
+        if ( in_array( $meta_key, $skip_keys, true ) ) continue;
 
         $raw = maybe_unserialize( $meta_arr[0] ?? '' );
 
-        // Kiểm tra mảng toàn số nguyên dương (dạng array)
-        if ( is_array( $raw ) && ! empty( $raw ) ) {
+        if ( is_array( $raw ) && count( $raw ) >= 1 ) {
             $candidate = array_values( array_filter( array_map( 'intval', $raw ) ) );
-            if ( count( $candidate ) === count( $raw ) && min( $candidate ) > 0 ) {
-                // Verify ảnh đầu tiên thực sự là attachment hình ảnh
-                if ( wp_attachment_is_image( $candidate[0] ) ) {
-                    return $candidate;
-                }
+            // Mảng thuần integer dương, và tất cả phần tử đều convert được → không lẫn string
+            if ( count( $candidate ) === count( $raw )
+                && min( $candidate ) > 0
+                && wp_attachment_is_image( $candidate[0] ) ) {
+                return $candidate;
             }
-        }
-
-        // Kiểm tra chuỗi dạng "123,456,789" (nhiều IDs)
-        if ( is_string( $raw ) && strpos( $raw, ',' ) !== false
-            && preg_match( '/^\d+(,\s*\d+)+$/', trim( $raw ) ) ) {
+        } elseif ( is_string( $raw )
+            && preg_match( '/^\d+(?:,\s*\d+)+$/', trim( $raw ) ) ) {
             $candidate = array_values( array_filter( array_map( 'intval', explode( ',', $raw ) ) ) );
-            if ( ! empty( $candidate ) && wp_attachment_is_image( $candidate[0] ) ) {
+            if ( ! empty( $candidate ) && min( $candidate ) > 0
+                && wp_attachment_is_image( $candidate[0] ) ) {
                 return $candidate;
             }
         }
@@ -226,6 +266,16 @@ add_filter( 'woocommerce_available_variation', function( $data, $product, $varia
         );
     }
     $data['gallery_images'] = $gallery;
+
+    // DEBUG (xoá sau khi xác định meta key): liệt kê tất cả meta key của variation
+    // Xem trong DevTools → Network → ?wc-ajax=get_variation hoặc trong page source
+    // tìm "product_variations" rồi xem trường _sv2_meta_keys của từng variation.
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        $all_keys = array_keys( get_post_meta( $var_id ) );
+        sort( $all_keys );
+        $data['_sv2_meta_keys'] = $all_keys;
+    }
+
     return $data;
 }, 10, 3 );
 

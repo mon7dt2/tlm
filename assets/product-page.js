@@ -179,25 +179,19 @@ jQuery(function ($) {
 
         var origHTML  = $gallery.html();
         var origCount = parseInt($gallery.attr('data-count'), 10) || 1;
+        var fancyGroup = $gallery.find('.saltlux-gallery-link').first().data('fancybox') || 'sv2-gallery';
 
-        // fancybox group name comes from the first link's data-fancybox
-        var fancyGroup = $gallery.find('.saltlux-gallery-link').first().data('fancybox') || 'saltlux-gallery-variant';
+        /* ── helpers ─────────────────────────────────────────────────────── */
 
-
-        function esc(str) {
-            return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        function esc(s) {
+            return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
 
-        function getDots() {
-            return $('.sv2-gallery-dots');
-        }
+        function getDots() { return $('.sv2-gallery-dots'); }
 
         function rebuildDots(count) {
             var $dots = getDots();
-            if (count < 2) {
-                $dots.hide();
-                return;
-            }
+            if (count < 2) { $dots.hide(); return; }
             var html = '';
             for (var i = 0; i < count; i++) {
                 html += '<span class="sv2-gallery-dot' + (i === 0 ? ' is-active' : '') + '" data-index="' + i + '"></span>';
@@ -205,24 +199,45 @@ jQuery(function ($) {
             if ($dots.length) {
                 $dots.html(html).show();
             } else {
-                // dots container didn't exist (original had 1 image) — create it
-                var $newDots = $('<div class="sv2-gallery-dots">' + html + '</div>');
-                $gallery.after($newDots);
-                $newDots.on('click', '.sv2-gallery-dot', function () {
-                    var idx = parseInt($(this).data('index'), 10);
-                    $gallery[0].scrollTo({ left: idx * $gallery[0].offsetWidth, behavior: 'smooth' });
+                var $nd = $('<div class="sv2-gallery-dots">' + html + '</div>');
+                $gallery.after($nd);
+                $nd.on('click', '.sv2-gallery-dot', function () {
+                    $gallery[0].scrollTo({ left: parseInt($(this).data('index'),10) * $gallery[0].offsetWidth, behavior: 'smooth' });
                 });
             }
         }
 
+        /**
+         * Thêm class is-loaded khi ảnh trong mỗi item thực sự load xong.
+         * Giống logic skeleton ở đầu file — dùng chung cho cả gallery gốc
+         * lẫn gallery được xây dựng động bởi variant.
+         */
+        function markItemsLoaded($container) {
+            $container.find('.saltlux-gallery-item').each(function () {
+                var $item = $(this);
+                if ($item.hasClass('is-loaded')) return; // đã xử lý rồi
+                var img = $item.find('.saltlux-gallery-img')[0];
+                if (!img) { $item.addClass('is-loaded'); return; }
+                if (img.complete && img.naturalWidth > 0) {
+                    $item.addClass('is-loaded');
+                } else {
+                    $(img).one('load error', function () { $item.addClass('is-loaded'); });
+                }
+            });
+        }
+
+        /**
+         * Build HTML gallery items.
+         * KHÔNG thêm is-loaded vào class — để markItemsLoaded xử lý sau
+         * khi ảnh thực sự load xong (tránh skeleton bị xóa trước khi ảnh hiện).
+         */
         function buildGalleryHTML(images) {
-            var count = images.length;
-            var html  = '';
+            var count = images.length, html = '';
             for (var i = 0; i < count; i++) {
                 var img       = images[i];
                 var isMain    = (i === 0);
                 var isLastOdd = (count % 2 !== 0) && (i === count - 1);
-                var cls       = 'saltlux-gallery-item is-loaded';
+                var cls       = 'saltlux-gallery-item';
                 if (isMain)    cls += ' saltlux-gallery-item--main';
                 if (isLastOdd) cls += ' saltlux-gallery-item--last-odd';
 
@@ -230,60 +245,52 @@ jQuery(function ($) {
                 html += '<a href="' + esc(img.full_src || img.src) + '" data-fancybox="' + esc(fancyGroup) + '" class="saltlux-gallery-link">';
                 html += '<img src="' + esc(img.src) + '"';
                 if (img.srcset) html += ' srcset="' + esc(img.srcset) + '"';
-                if (img.sizes)  html += ' sizes="' + esc(img.sizes) + '"';
-                html += ' alt="' + esc(img.alt) + '" class="saltlux-gallery-img" loading="' + (isMain ? 'eager' : 'lazy') + '">';
+                if (img.sizes)  html += ' sizes="'  + esc(img.sizes)  + '"';
+                html += ' alt="' + esc(img.alt) + '" class="saltlux-gallery-img"';
+                html += ' loading="' + (isMain ? 'eager' : 'lazy') + '">';
                 html += '</a></div>';
             }
             return html;
         }
 
-        function applyVariantGallery(variation) {
-            var mainImg      = (variation && variation.image && variation.image.src) ? variation.image : null;
-            var galleryImgs  = (variation && variation.gallery_images) ? variation.gallery_images : [];
-            var allImages    = [];
-            if (mainImg) allImages.push(mainImg);
-            for (var i = 0; i < galleryImgs.length; i++) {
-                if (galleryImgs[i] && galleryImgs[i].src) allImages.push(galleryImgs[i]);
-            }
-            if (!allImages.length) return;
-
-            $gallery.html(buildGalleryHTML(allImages));
-            $gallery.attr('data-count', allImages.length);
+        function applyVariantGallery(imgs) {
+            if (!imgs || !imgs.length) return;
+            $gallery.html(buildGalleryHTML(imgs));
+            $gallery.attr('data-count', imgs.length);
             $gallery[0].scrollLeft = 0;
-            rebuildDots(allImages.length);
-
-            if (typeof $.fn.fancybox === 'function') {
-                $gallery.find('.saltlux-gallery-link').fancybox({ backFocus: false, buttons: ['zoom', 'close'] });
-            }
+            rebuildDots(imgs.length);
+            markItemsLoaded($gallery); // skeleton đúng chuẩn cho ảnh mới
         }
 
         function restoreGallery() {
             $gallery.html(origHTML);
             $gallery.attr('data-count', origCount);
             $gallery[0].scrollLeft = 0;
-
-            var $dots = getDots();
-            if (origCount > 1) {
-                rebuildDots(origCount);
-            } else {
-                $dots.hide();
-            }
-
-            if (typeof $.fn.fancybox === 'function') {
-                $gallery.find('.saltlux-gallery-link').fancybox({ backFocus: false, buttons: ['zoom', 'close'] });
-            }
+            if (origCount > 1) rebuildDots(origCount);
+            else getDots().hide();
+            // Ảnh gốc đã được cache — thêm is-loaded ngay để tránh skeleton thừa
+            $gallery.find('.saltlux-gallery-item').addClass('is-loaded');
         }
 
-        // Cache: tên attribute màu per-form (undefined = chưa tính, null = không có)
-        var _imageAttr;
-
-        /**
-         * Tự động detect attribute nào drive ảnh khác nhau (= attribute màu).
-         * Tiêu chí: có ≥2 giá trị khác nhau → ≥2 src ảnh khác nhau.
-         * Kết quả được cache để không tính lại mỗi event.
+        /* ── detect color attribute ────────────────────────────────────────
+         *
+         * Dùng "consistency check" thay vì overwrite:
+         * - Build valToSrcs[value] = SET of unique srcs across all variations.
+         * - Attribute MÀU: mỗi value → đúng 1 src (consistent) VÀ ≥2 value
+         *   có src khác nhau.
+         *
+         * Tại sao: overwrite (valToImg[v] = src) gây lỗi khi variations được
+         * lưu xen kẽ (Trắng-O, Xanh-O, Trắng-L, Xanh-L ...). Size 'o' bị
+         * ghi đè bởi Xanh Lá (green) còn size 'm' bị ghi đè bởi Trắng
+         * (white) → SIZE có vẻ như có ≥2 ảnh khác nhau → bị nhầm là color.
+         * Consistency check phát hiện size 'o' map đến cả white lẫn green
+         * → loại SIZE khỏi candidates.
          */
+        var _imageAttr; // undefined = chưa tính, null = không tìm thấy
+
         function getImageAttr(variations) {
             if (_imageAttr !== undefined) return _imageAttr;
+            _imageAttr = null;
 
             var attrs = {};
             for (var i = 0; i < variations.length; i++) {
@@ -292,119 +299,109 @@ jQuery(function ($) {
                 }
             }
 
-            _imageAttr = null; // fallback: không tìm thấy
             for (var attr in attrs) {
                 if (!attrs.hasOwnProperty(attr)) continue;
-                var valToImg = {};
+
+                var valToSrcs = {};
                 for (var i = 0; i < variations.length; i++) {
                     var val = variations[i].attributes[attr];
                     var src = variations[i].image && variations[i].image.src;
-                    if (!val || !src) continue; // bỏ qua "any" ('') và variation không ảnh
-                    valToImg[val] = src;
+                    if (!val || !src) continue; // '' = "any value" → skip
+                    if (!valToSrcs[val]) valToSrcs[val] = {};
+                    valToSrcs[val][src] = true;
                 }
-                var uniqueImgs = {};
-                for (var v in valToImg) {
-                    if (valToImg.hasOwnProperty(v)) uniqueImgs[valToImg[v]] = true;
+
+                var ok = true, globalSrcs = {};
+                for (var v in valToSrcs) {
+                    if (!valToSrcs.hasOwnProperty(v)) continue;
+                    var srcs = Object.keys(valToSrcs[v]);
+                    if (srcs.length !== 1) { ok = false; break; } // value này có nhiều ảnh → không phải color
+                    globalSrcs[srcs[0]] = true;
                 }
-                if (Object.keys(uniqueImgs).length > 1) {
-                    _imageAttr = attr;
-                    break;
+                if (ok && Object.keys(globalSrcs).length > 1) {
+                    _imageAttr = attr; break;
                 }
             }
             return _imageAttr;
         }
 
-        /**
-         * Gom tất cả ảnh (main + gallery_images) từ mọi variation cùng màu.
-         * Dedup theo full_src để tránh trùng lặp.
-         */
+        /* ── collect images for a color value ─────────────────────────────── */
+
         function collectByColor(variations, imageAttr, colorValue) {
             var seen = {}, images = [];
             for (var i = 0; i < variations.length; i++) {
                 var v   = variations[i];
                 var val = v.attributes[imageAttr];
-                if (val !== '' && val !== colorValue) continue; // '' = "any" → match hết
+                if (val !== '' && val !== colorValue) continue; // '' = "any" → match
 
-                // Ảnh chính của variation
                 if (v.image && v.image.src) {
-                    var key = v.image.full_src || v.image.src;
-                    if (!seen[key]) { seen[key] = true; images.push(v.image); }
+                    var k = v.image.full_src || v.image.src;
+                    if (!seen[k]) { seen[k] = true; images.push(v.image); }
                 }
-                // Ảnh gallery phụ (từ plugin variation gallery)
                 var extras = v.gallery_images || [];
                 for (var j = 0; j < extras.length; j++) {
                     if (!extras[j] || !extras[j].src) continue;
-                    var ekey = extras[j].full_src || extras[j].src;
-                    if (!seen[ekey]) { seen[ekey] = true; images.push(extras[j]); }
+                    var ek = extras[j].full_src || extras[j].src;
+                    if (!seen[ek]) { seen[ek] = true; images.push(extras[j]); }
                 }
             }
             return images;
         }
 
-        function renderColorGallery(images) {
-            if (!images.length) return;
-            applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
-        }
+        /* ── form binding ──────────────────────────────────────────────────── */
 
         function bindVariationForm($form) {
-            _imageAttr = undefined; // reset cache khi bind lại
+            _imageAttr = undefined;
             $form.off('found_variation.sv2 reset_data.sv2 change.sv2gallery');
 
-            // ── change: chỉ react khi đúng attribute màu thay đổi ──
             $form.on('change.sv2gallery', 'select[name^="attribute_"]', function () {
                 var variations = $form.data('product_variations');
-                if (!variations || !variations.length) return; // AJAX mode → dùng found_variation
+                if (!variations || !variations.length) return;
 
                 var imageAttr = getImageAttr(variations);
                 if (!imageAttr) return;
-                if ($(this).attr('name') !== imageAttr) return; // size/attribute khác → bỏ qua
+                if ($(this).attr('name') !== imageAttr) return; // size → bỏ qua
 
-                var colorValue = $(this).val();
-                if (!colorValue) { restoreGallery(); return; }
+                var colorVal = $(this).val();
+                if (!colorVal) { restoreGallery(); return; }
 
-                renderColorGallery(collectByColor(variations, imageAttr, colorValue));
+                var imgs = collectByColor(variations, imageAttr, colorVal);
+                if (imgs.length) applyVariantGallery(imgs);
             });
 
-            // ── found_variation: ưu tiên collect theo màu từ inline data ──
-            // Nếu là AJAX mode (no inline data), fallback dùng images từ variation object
             $form.on('found_variation.sv2', function (e, variation) {
                 if (!variation) return;
                 var variations = $form.data('product_variations');
 
                 if (variations && variations.length) {
-                    // Inline mode: gom đủ ảnh cùng màu
+                    // Inline mode: gom theo màu
                     var imageAttr = getImageAttr(variations);
                     if (!imageAttr) return;
-                    var colorValue = $form.find('select[name="' + imageAttr + '"]').val();
-                    if (!colorValue) return;
-                    renderColorGallery(collectByColor(variations, imageAttr, colorValue));
+                    var colorVal = $form.find('select[name="' + imageAttr + '"]').val();
+                    if (!colorVal) return;
+                    var imgs = collectByColor(variations, imageAttr, colorVal);
+                    if (imgs.length) applyVariantGallery(imgs);
                 } else {
-                    // AJAX mode (>30 variations): chỉ có data của variation hiện tại
-                    var imgs = [];
-                    var seen = {};
-                    var addImg = function(img) {
+                    // AJAX mode (>30 variations): dùng data của variation hiện tại
+                    var imgs = [], seen = {};
+                    var add = function (img) {
                         if (!img || !img.src) return;
                         var k = img.full_src || img.src;
                         if (!seen[k]) { seen[k] = true; imgs.push(img); }
                     };
-                    addImg(variation.image);
+                    add(variation.image);
                     var extras = variation.gallery_images || [];
-                    for (var j = 0; j < extras.length; j++) addImg(extras[j]);
-                    if (imgs.length) renderColorGallery(imgs);
+                    for (var j = 0; j < extras.length; j++) add(extras[j]);
+                    if (imgs.length) applyVariantGallery(imgs);
                 }
             });
 
-            $form.on('reset_data.sv2', function () {
-                restoreGallery();
-            });
+            $form.on('reset_data.sv2', function () { restoreGallery(); });
         }
 
         var $form = $('form.variations_form');
         if ($form.length) bindVariationForm($form);
-
-        $(document).on('wc_variation_form', function (e) {
-            bindVariationForm($(e.target));
-        });
+        $(document).on('wc_variation_form', function (e) { bindVariationForm($(e.target)); });
     }());
 
 });
