@@ -1,0 +1,2895 @@
+/*
+Theme Name: Saltlux V2
+Theme URI: https://gitlab.com/nguyenducquang
+Description: Saltlux V2 — dealer locator + KOL/Tour Players
+Version: 2.14.1
+Author: QuangND
+Author URI: https://gitlab.com/nguyenducquang
+Template: astra
+*/
+body.ehf-stylesheet-saltlux #ast-mobile-header .content-align-flex-start {
+	max-height: calc(100vh - 105px);
+}
+
+body.ehf-stylesheet-saltlux.admin-bar #ast-mobile-header .content-align-flex-start {
+	max-height: calc(100vh - 150px);
+}
+
+body.admin-bar #ast-mobile-header .content-align-flex-start {
+	max-height: calc(100vh - 150px);
+}
+
+body #ast-mobile-header .content-align-flex-start {
+	max-height: calc(100vh - 105px);
+}
+
+.saltlux-language-switcher-menu {
+	list-style: none;
+	margin-left: 5px;
+	display: flex;
+	column-gap: 15px;
+}
+
+.saltlux-language-switcher-item:hover {
+	cursor: pointer;
+}
+
+/* Style for iPad pro screen */
+@media screen and (min-width: 1024px) and (max-width: 1190px) {
+	header .custom-logo-link img {
+		max-width: 150px !important;
+		width: 150px !important;
+	}
+	.site-header-primary-section-left-center.site-header-section.ast-flex.ast-grid-left-center-section {
+		display: none !important;
+		position: absolute;
+	}
+	.ast-site-header-cart {
+		margin-top: 15px;
+	}
+	#ast-desktop-header .trp-ls-shortcode-current-language {
+		margin-top: -5px;
+	}
+	.main-header-menu .menu-link,
+	.main-header-menu > a {
+		padding: 0 6px;
+		font-size: 12px;
+	}
+	.main-navigation > .main-header-menu {
+		white-space: nowrap;
+		flex-wrap: nowrap;
+	}
+	#masthead .ast-container, .site-header-focus-item + .ast-breadcrumbs-wrapper {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.ast-archive-entry-banner .ast-container {
+	padding: unset;
+}
+
+#primary .csl-search-form .currentloc img {
+	filter: grayscale(100%);
+}
+
+#primary .csl-search-form button {
+	background-color: #000000;
+}
+
+#primary .csl-search-form #mapreset {
+	color: #000000;
+	background-color: #fff;
+	border: 2px solid #000000;
+}
+
+#primary .csl-wrapper #locations-near-you .csl-list-item a.viewmaplink {
+	background: #000000;
+}
+
+#primary .csl-wrapper #locations-near-you .csl-list-item .marker-link:hover {
+	background-color: #000000;
+}
+
+.tax-product_cat #content, .post-type-archive-product #content {
+	padding: 30px;
+}
+
+.post-type-archive-product .ast-archive-entry-banner .ast-container {
+	position: relative;
+	height: 313px;
+}
+
+.post-type-archive-product .ast-archive-entry-banner h1 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.single-product .wlr-product-message {
+	display: none !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.single-product #main table.variations tr {
+	display: flex;
+}
+
+.single-product #main table.variations .label {
+	max-width: 130px;
+	width: 100%;
+}
+
+@media screen and (min-width: 922px) {
+	.single-product #main table.variations .label {
+		max-width: 200px;
+		width: 100%;
+	}
+}
+
+.tax-product_cat .ast-archive-entry-banner .ast-container {
+	position: relative;
+}
+
+.tax-product_cat .ast-archive-entry-banner h1 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: #fff;
+}
+
+#banner-prod-cat {
+	max-height: 313px;
+	overflow: hidden;
+}
+
+#banner-prod-cat img {
+	max-height: 313px;
+	object-fit: cover;
+	width: 100%;
+}
+
+#primary .validate-blling-vat input {
+	cursor: not-allowed;
+	background: #d2d2d2;
+}
+
+#primary .validate-blling-vat input.vat-checked {
+	cursor: auto;
+	background: #fff;
+}
+
+.cfvsw-swatches-disabled {
+	background: #0303;
+	cursor: not-allowed;
+}
+
+.site-footer .wpforms-container form {
+	display: flex;
+}
+
+.site-footer .wpforms-container .wpforms-submit {
+	width: 120px;
+}
+
+.site-footer .wpforms-container .wpforms-field-container {
+	width: 100%;
+}
+
+.site-footer .wpforms-container .wpforms-field-container input {
+	width: 100%;
+	max-width: unset !important;
+}
+
+@media screen and (max-width: 1250px) and (min-width: 922px) {
+	.site-footer .site-primary-footer-wrap {
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+}
+
+.main-header-bar-navigation span.dropdown-menu-toggle.ast-header-navigation-arrow {
+	display: none;
+}
+
+.ast-mobile-header-wrap .ast-primary-header-bar,
+.ast-primary-header-bar .site-primary-header-wrap {
+	height: 104px;
+}
+
+.trp-language-switcher {
+	width: unset;
+}
+
+.astra-megamenu .menu-item-heading .menu-text {
+	font-size: 38px;
+}
+
+.astra-megamenu .menu-item-heading .menu-text:hover {
+	text-decoration: underline;
+}
+
+@media screen and (max-width: 1440px) {
+	.ast-builder-menu-1 .main-header-menu,
+	.ast-header-break-point .ast-builder-menu-1 .main-header-menu {
+		margin-left: unset;
+	}
+	.ast-header-html-2 {
+		margin-right: unset;
+	}
+}
+
+@media screen and (max-width: 499px) {
+	.woocommerce .ast-header-woo-cart .ast-site-header-cart .ast-addon-cart-wrap,
+	.ast-header-woo-cart .ast-site-header-cart .ast-addon-cart-wrap {
+		margin-right: 24px;
+	}
+	[data-section="section-header-mobile-trigger"] .ast-button-wrap .menu-toggle {
+		margin-left: 24px;
+	}
+	.ast-header-break-point .main-navigation .sub-menu .menu-item .menu-item .menu-link {
+		padding-left: unset;
+	}
+	.sub-menu .menu-item-heading > .menu-link {
+		display: none !important;
+	}
+}
+
+@media screen and (min-width: 922px) {
+	#ast-desktop-header .ast-builder-grid-row {
+		grid-column-gap: 0;
+		overflow-wrap: normal;
+	}
+	#ast-desktop-header .ast-builder-grid-row > .site-header-section {
+		flex-wrap: unset;
+	}
+	#ast-desktop-header .trp-ls-shortcode-current-language {
+		width: 85px !important;
+		border: unset;
+	}
+	#ast-desktop-header .trp-ls-shortcode-current-language:hover {
+		border: unset;
+	}
+	#ast-desktop-header .trp-ls-shortcode-language {
+		width: 85px !important;
+	}
+	#ast-desktop-header .ast-builder-menu-3 .main-header-menu,
+	#ast-desktop-header .ast-header-break-point .ast-builder-menu-3 .main-header-menu {
+		margin-left: 0;
+	}
+	.ast-desktop .ast-primary-header-bar .main-header-menu > .menu-item {
+		line-height: 40px;
+	}
+	.ast-main-header-wrap .ast-header-account-wrap {
+		margin-top: -10px;
+	}
+	.ast-header-html-2 .ast-header-html {
+		margin-top: -18px;
+	}
+}
+
+.site-footer .wpforms-submit {
+	margin-top: 6px;
+	border-radius: unset !important;
+	font-size: 13px !important;
+}
+
+input.wpforms-field-medium.wpforms-field-required {
+	border-radius: unset !important;
+}
+
+#wll-site-launcher .cursor-pointer {
+	bottom: 75px !important;
+	border-radius: unset;
+	right: 25px;
+}
+
+@media screen and (min-width: 545px) {
+	.ast-archive-entry-banner[data-post-type="product"] .ast-container h1 {
+		font-size: 60px;
+	}
+}
+
+@media screen and (max-width: 544px) {
+	#wp-nt-aio-wrapper {
+		right: 15px !important;
+	}
+}
+
+p.wll-preview-point_for_purchase-description.text-sm.font-normal.text-light {
+	display: none;
+}
+
+#wll-site-launcher .wll-relative.wll-flex.wll-flex-col.w-full {
+	height: 300px;
+}
+
+.single #reviews #respond .stars {
+	margin-top: -8px !important;
+}
+
+.single #reviews #comment {
+	margin-top: 15px;
+	resize: vertical;
+}
+
+.astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart-item .variation dt {
+	width: 100%;
+	max-width: 100px;
+}
+
+.error404 .page-sub-title {
+	line-height: 1.38;
+}
+
+.elementor-element .uael-post__header-filter {
+	border: solid 1px transparent !important;
+}
+
+/* ==========================================================================
+   PRODUCT PAGE ENHANCEMENTS — taylormadegolf.jp inspired
+   ========================================================================== */
+
+/* ── Star rating in product summary ─────────────────────────────────────── */
+.sv2-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0 16px;
+    line-height: 1;
+}
+
+.sv2-stars {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    line-height: 1;
+}
+
+.sv2-star {
+    font-size: 16px;
+    line-height: 1;
+    display: inline-block;
+}
+
+.sv2-star--full  { color: #c8a951; }
+.sv2-star--half  { color: #c8a951; opacity: .55; }
+.sv2-star--empty { color: #ccc; }
+
+.sv2-rating-link {
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+    border-bottom: 1px solid #bbb;
+    padding-bottom: 1px;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+}
+
+.sv2-rating-link:hover { color: #111; border-bottom-color: #111; }
+
+.sv2-rating-link--write {
+    color: #999;
+    border-bottom-style: dashed;
+    font-style: italic;
+}
+
+.sv2-rating-count { font-weight: 600; color: #444; }
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+/* --- Fix: product gallery images overflow (legacy WC gallery) --- */
+.woocommerce-product-gallery {
+    overflow: hidden;
+}
+.woocommerce-product-gallery .woocommerce-product-gallery__image img,
+.woocommerce-product-gallery .woocommerce-product-gallery__image a {
+    max-width: 100%;
+    display: block;
+}
+.woocommerce-product-gallery figure {
+    margin: 0;
+}
+
+/* WooCommerce's default gallery is replaced by .saltlux-product-gallery */
+.single-product div.product .woocommerce-product-gallery {
+    display: none !important;
+}
+
+/* ==========================================================================
+   SINGLE PRODUCT — MOBILE / TABLET  (<922px)
+   DOM order is already correct (gallery @after_summary 1, tabs @27).
+   Only need to undo WooCommerce's float-based layout.
+   ========================================================================== */
+@media screen and (max-width: 921px) {
+    .single-product div.product > * {
+        width: 100% !important;
+        float: none !important;
+        grid-column: unset !important;
+        grid-row: unset !important;
+    }
+    .single-product div.product .summary.entry-summary {
+        float: none !important;
+        width: 100% !important;
+        clear: both;
+    }
+    .single-product div.product .sku-input {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   SINGLE PRODUCT — 2-COLUMN LAYOUT (gallery left · summary right)
+   ========================================================================== */
+@media screen and (min-width: 922px) {
+
+    /* Override WC float-based layout with CSS Grid */
+    .single-product div.product {
+        display: grid !important;
+        grid-template-columns: 54% 1fr;
+        column-gap: 48px;
+        align-items: start;
+    }
+
+    /* Gallery → column 1, row 1 */
+    .single-product div.product .saltlux-product-gallery {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    /* Sale badge overlays top-left of gallery */
+    .single-product div.product > .onsale {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: start;
+        justify-self: start;
+        z-index: 9;
+        margin: 12px;
+    }
+
+    /* Summary → column 2, row 1 — override WC float:right width:48% */
+    .single-product div.product .summary.entry-summary {
+        grid-column: 2;
+        grid-row: 1;
+        width: auto !important;
+        float: none !important;
+        clear: none;
+    }
+
+    /* Full-width below the 2-col area */
+    .single-product div.product .sv2-browse-strip,
+    .single-product div.product .saltlux-services-strip,
+    .single-product div.product .saltlux-pairs-section,
+    .single-product div.product .woocommerce-tabs,
+    .single-product div.product .wc-tabs-wrapper,
+    .single-product div.product .up-sells,
+    .single-product div.product .saltlux-related-products,
+    .single-product div.product .related.products {
+        grid-column: 1 / -1;
+    }
+
+    /* Hidden SKU input must not disrupt grid rows */
+    .single-product div.product .sku-input {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   PRODUCT GALLERY — desktop: 2-row horizontal scroll · mobile: 1-up slider
+   ========================================================================== */
+
+@keyframes saltlux-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ── Gallery: desktop 2×2 grid, scroll right for more ─────────────────────
+   aspect-ratio: 1/1 gives a definite height so grid-template-rows:1fr 1fr
+   resolves correctly and grid-auto-flow:column works — extra cols overflow.
+   ──────────────────────────────────────────────────────────────────────── */
+.saltlux-product-gallery {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(50% - 2px);
+    aspect-ratio: 1 / 1;
+    gap: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.saltlux-product-gallery::-webkit-scrollbar { display: none; }
+
+/* Snap at start of each 2×2 slide (items 1, 5, 9, …) */
+.saltlux-gallery-item:nth-child(4n+1) {
+    scroll-snap-align: start;
+}
+
+.saltlux-gallery-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    line-height: 0;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 400% 100%;
+    animation: saltlux-shimmer 1.5s ease infinite;
+}
+
+.saltlux-gallery-item.is-loaded {
+    background: #f8f8f8;
+    animation: none;
+}
+
+.saltlux-gallery-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: zoom-in;
+}
+
+.saltlux-gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #f8f8f8;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.4s ease, filter 0.4s ease;
+}
+
+.saltlux-gallery-item.is-loaded .saltlux-gallery-img {
+    opacity: 1;
+}
+
+.saltlux-gallery-item:hover .saltlux-gallery-img {
+    transform: scale(1.03);
+    filter: brightness(0.88);
+}
+
+/* Single image: full width 4:3, no scroll */
+.saltlux-product-gallery[data-count="1"] {
+    grid-template-rows: 1fr;
+    grid-auto-columns: 100%;
+    aspect-ratio: 4 / 3;
+}
+.saltlux-product-gallery[data-count="1"] .saltlux-gallery-item {
+    aspect-ratio: 4 / 3;
+}
+
+/* Mobile: 1-up snap slider — reset desktop aspect-ratio */
+@media screen and (max-width: 921px) {
+    .saltlux-product-gallery {
+        display: flex;
+        flex-direction: row;
+        aspect-ratio: unset;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 0;
+    }
+    .saltlux-gallery-item {
+        flex: 0 0 100%;
+        width: 100%;
+        scroll-snap-align: center;
+        aspect-ratio: 1;
+    }
+    .saltlux-gallery-item:nth-child(4n+1) {
+        scroll-snap-align: center;
+    }
+    .saltlux-product-gallery[data-count="1"] {
+        aspect-ratio: unset;
+        grid-template-rows: unset;
+        grid-auto-columns: unset;
+    }
+    .saltlux-product-gallery[data-count="1"] .saltlux-gallery-item {
+        aspect-ratio: 4 / 3;
+    }
+}
+
+/* Mobile slide dots */
+.sv2-gallery-dots {
+    display: none;
+}
+@media screen and (max-width: 921px) {
+    .sv2-gallery-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 0 4px;
+    }
+    .sv2-gallery-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #ccc;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+        flex-shrink: 0;
+    }
+    .sv2-gallery-dot.is-active {
+        background: #111;
+        transform: scale(1.3);
+    }
+}
+
+/* Small mobile — keep font tweaks */
+@media screen and (max-width: 480px) {
+    .single-product .product_title  { font-size: 19px; }
+    .single-product .summary .price { font-size: 17px; }
+    .single-product button.single_add_to_cart_button,
+    .trymylook-button { padding: 14px 16px; font-size: 12px; }
+}
+
+/* --- Short description --- */
+.woocommerce div.product .woocommerce-product-details__short-description {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   PRODUCT SUMMARY — TaylorMade JP style
+   ========================================================================== */
+
+/* Title */
+.single-product .product_title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    color: #111;
+    margin-bottom: 10px;
+}
+
+/* Price */
+.single-product .summary .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 18px;
+    display: block;
+    letter-spacing: 0.01em;
+}
+.single-product .summary .price del {
+    color: #aaa;
+    font-weight: 400;
+    font-size: 15px;
+    margin-right: 6px;
+}
+.single-product .summary .price ins {
+    color: #111;
+    text-decoration: none;
+}
+
+/* Variations: label stacked above selector */
+.single-product .variations {
+    width: 100%;
+    margin-bottom: 8px;
+    border-collapse: collapse;
+}
+.single-product #main table.variations tr,
+.single-product .variations tr {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    margin-bottom: 14px;
+}
+.single-product #main table.variations .label,
+.single-product .variations .label {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 0 6px;
+}
+.single-product .variations .label label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #111;
+}
+.single-product .variations .value {
+    width: 100%;
+    padding: 0;
+}
+.single-product .variations .value select {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 0;
+}
+.single-product .variations .reset_variations {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* Quantity + buttons: all stacked full-width */
+.single-product form.cart,
+.single-product .cart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+.single-product .woocommerce-variation-add-to-cart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.single-product .quantity {
+    width: 100%;
+}
+.single-product .quantity .qty {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 0;
+    -moz-appearance: textfield;
+    background: #fff;
+}
+.single-product .quantity .qty::-webkit-inner-spin-button,
+.single-product .quantity .qty::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+/* Add to Cart button — full width, solid black */
+.single-product button.single_add_to_cart_button {
+    display: block;
+    width: 100%;
+    background: #111 !important;
+    color: #fff !important;
+    border: 2px solid #111 !important;
+    padding: 15px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.2s, border-color 0.2s;
+    text-align: center;
+    line-height: 1;
+}
+.single-product button.single_add_to_cart_button:hover {
+    background: #333 !important;
+    border-color: #333 !important;
+}
+
+/* Try My Look button — full width, outline, below add-to-cart */
+.trymylook-button,
+.single-product .trymylook-button {
+    display: block !important;
+    width: 100%;
+    background: transparent !important;
+    color: #111 !important;
+    border: 2px solid #111 !important;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.2s, color 0.2s;
+    text-align: center;
+    line-height: 1;
+    margin-top: 0;
+    box-sizing: border-box;
+}
+.trymylook-button:hover,
+.single-product .trymylook-button:hover {
+    background: #111 !important;
+    color: #fff !important;
+}
+
+/* "View cart" link after adding */
+.single-product .added_to_cart.wc-forward {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+    text-decoration: underline;
+    padding: 4px 0;
+}
+
+/* Product meta (SKU) — sits between category and title */
+.single-product .product_meta {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #888;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.5;
+}
+.single-product .product_meta a {
+    color: #666;
+}
+.single-product .product_meta a:hover {
+    color: #111;
+    text-decoration: underline;
+}
+.single-product .product_meta .posted_in,
+.single-product .product_meta .tagged_as {
+    display: none;
+}
+
+/* ==========================================================================
+   DEALER SECTION
+   ========================================================================== */
+.saltlux-dealer-section {
+    margin-top: 24px;
+    border: 1px solid #e0e0e0;
+}
+
+.saltlux-dealer-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f5f5;
+    border: none;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.saltlux-dealer-toggle:hover {
+    background: #d8d8d8;
+}
+
+.saltlux-dealer-chevron {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+
+.saltlux-dealer-toggle[aria-expanded="true"] .saltlux-dealer-chevron {
+    transform: rotate(180deg);
+}
+
+.saltlux-dealer-list {
+    padding: 0;
+}
+
+.saltlux-dealer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border-top: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+}
+
+.saltlux-dealer-item--priority {
+    background: #fafafa;
+}
+
+.saltlux-dealer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.saltlux-dealer-badge {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    margin-bottom: 4px;
+    width: fit-content;
+}
+
+.saltlux-dealer-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.saltlux-dealer-address {
+    font-size: 13px;
+    color: #666;
+    white-space: pre-line;
+}
+
+.saltlux-dealer-phone {
+    font-size: 13px;
+    color: #444;
+    text-decoration: none;
+}
+
+.saltlux-dealer-phone:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+.saltlux-dealer-cta {
+    display: inline-block;
+    background: #000;
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.saltlux-dealer-cta:hover {
+    background: #333;
+}
+
+/* ==========================================================================
+   BROWSE STRIP — category pills above services
+   ========================================================================== */
+.sv2-browse-strip {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 60px;
+    background: #fff;
+    border-bottom: 1.5px solid #111;
+    grid-column: 1 / -1;
+}
+
+.sv2-browse-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    color: #111;
+    flex-shrink: 0;
+}
+
+.sv2-browse-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sv2-browse-pill {
+    display: inline-block;
+    padding: 5px 14px;
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.sv2-browse-pill:hover {
+    background: #cc0000;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .sv2-browse-strip {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+    }
+}
+
+/* ==========================================================================
+   SERVICES STRIP — 3 rows, full-width image 300px, text overlay
+   Shortcode: [saltlux_services]
+   ========================================================================== */
+/* ── Services strip: 1 item = fullwidth, 2+ = grid with padding ─────────── */
+.saltlux-services-strip {
+    display: flex;
+    flex-direction: row;
+    padding: 0 40px 40px;
+    gap: 12px;
+    background: #f5f5f5;
+    margin-top: 40px;
+}
+
+/* Single card: full width, no side padding */
+.saltlux-services-strip[data-count="1"] {
+    padding: 0;
+}
+
+.saltlux-service-card {
+    flex: 1;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none !important;
+    color: #fff !important;
+    min-width: 0;
+}
+
+.saltlux-service-img {
+    display: block;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    background: #1a1a1a;
+    margin: 0;
+}
+
+/* Single: taller image */
+.saltlux-services-strip[data-count="1"] .saltlux-service-img {
+    height: 380px;
+}
+
+.saltlux-service-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.saltlux-service-card:hover .saltlux-service-img img {
+    transform: scale(1.05);
+}
+
+.saltlux-service-body {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 28px 36px;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,.72) 0%,
+        rgba(0,0,0,.28) 55%,
+        transparent 100%
+    );
+    gap: 6px;
+    transition: background 0.3s ease;
+}
+
+.saltlux-service-card:hover .saltlux-service-body {
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,.82) 0%,
+        rgba(0,0,0,.38) 60%,
+        rgba(0,0,0,.08) 100%
+    );
+}
+
+.saltlux-service-label {
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+}
+
+.saltlux-service-title {
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: #fff;
+}
+
+/* Single: larger title */
+.saltlux-services-strip[data-count="1"] .saltlux-service-title {
+    font-size: 30px;
+}
+
+.saltlux-service-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.65);
+    transition: gap .25s ease, color .25s ease;
+    margin-top: 2px;
+}
+
+.saltlux-service-card:hover .saltlux-service-arrow { gap: 14px; color: #fff; }
+
+.saltlux-service-card--no-img .saltlux-service-img {
+    background: linear-gradient(135deg, #1c1c1c 0%, #333 100%);
+}
+
+/* Responsive ≤ 768px: stack vertically, remove side padding */
+@media screen and (max-width: 768px) {
+    .saltlux-services-strip {
+        flex-direction: column;
+        padding: 0 0 32px;
+        gap: 4px;
+    }
+    .saltlux-service-img,
+    .saltlux-services-strip[data-count="1"] .saltlux-service-img {
+        height: 220px;
+    }
+    .saltlux-service-title,
+    .saltlux-services-strip[data-count="1"] .saltlux-service-title {
+        font-size: 20px;
+    }
+    .saltlux-service-body { padding: 18px 20px; gap: 4px; }
+    .saltlux-service-label { font-size: 10px; }
+}
+
+/* ==========================================================================
+   REVIEWS SECTION
+   ========================================================================== */
+
+.sv2-reviews-section {
+    background: #f5f5f5;
+    padding: 48px 40px 56px;
+    grid-column: 1 / -1;
+    scroll-margin-top: 80px;
+}
+
+.sv2-reviews-inner {
+    max-width: 800px;
+}
+
+.sv2-reviews-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #111;
+    letter-spacing: .02em;
+}
+
+.sv2-reviews-heading span {
+    color: #cc0000;
+    margin-right: 6px;
+}
+
+/* WooCommerce review list */
+.sv2-reviews-section .commentlist {
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+}
+
+.sv2-reviews-section .commentlist .comment_container {
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.sv2-reviews-section .commentlist .comment-text {
+    flex: 1;
+}
+
+.sv2-reviews-section .commentlist .star-rating {
+    color: #c8a951;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.sv2-reviews-section .commentlist .meta {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.sv2-reviews-section .commentlist .meta strong { color: #333; }
+
+.sv2-reviews-section .commentlist .description p {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.sv2-reviews-section .woocommerce-noreviews {
+    font-size: 14px;
+    color: #888;
+    margin: 0 0 24px;
+}
+
+/* Review form */
+.sv2-reviews-section #review_form_wrapper {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid #ddd;
+}
+
+.sv2-reviews-section #reply-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.sv2-reviews-section .comment-form p {
+    margin-bottom: 14px;
+}
+
+.sv2-reviews-section .comment-form label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.sv2-reviews-section .comment-form input[type="text"],
+.sv2-reviews-section .comment-form input[type="email"],
+.sv2-reviews-section .comment-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border-color .15s;
+    border-radius: 0;
+    font-family: inherit;
+}
+
+.sv2-reviews-section .comment-form input:focus,
+.sv2-reviews-section .comment-form textarea:focus {
+    border-color: #111;
+}
+
+.sv2-reviews-section .comment-form textarea { min-height: 110px; resize: vertical; }
+
+.sv2-reviews-section .comment-form .form-submit {
+    margin-top: 16px;
+}
+
+.sv2-reviews-section .comment-form .submit {
+    padding: 12px 32px;
+    background: #111;
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    cursor: pointer;
+    transition: background .15s;
+    border-radius: 0;
+    font-family: inherit;
+}
+
+.sv2-reviews-section .comment-form .submit:hover { background: #cc0000; }
+
+/* Star selector in review form */
+.sv2-reviews-section .stars a {
+    font-size: 20px;
+    color: #ddd;
+    text-decoration: none;
+    transition: color .1s;
+}
+.sv2-reviews-section .stars a:hover,
+.sv2-reviews-section .stars a.active,
+.sv2-reviews-section .stars.selected a.active { color: #c8a951; }
+
+@media (max-width: 768px) {
+    .sv2-reviews-section { padding: 32px 16px 40px; }
+}
+
+/* ==========================================================================
+   WOOCOMMERCE TABS
+   ========================================================================== */
+
+.woocommerce-tabs .wc-tabs {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 40px !important;
+    border-bottom: 2px solid #e0e0e0;
+    background: #fff;
+}
+
+.woocommerce-tabs .wc-tabs li { margin: 0; }
+
+.woocommerce-tabs .wc-tabs li a {
+    display: block;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #888;
+    text-decoration: none;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color .15s, border-color .15s;
+}
+
+.woocommerce-tabs .wc-tabs li.active a,
+.woocommerce-tabs .wc-tabs li a:hover { color: #111; border-bottom-color: #111; }
+
+.woocommerce-Tabs-panel {
+    padding: 10px 40px 56px !important;
+    background: #fff;
+}
+
+.woocommerce-Tabs-panel p,
+.woocommerce-Tabs-panel li { font-size: 14px; line-height: 1.8; color: #444; }
+
+@media (max-width: 768px) {
+    .woocommerce-tabs .wc-tabs { padding: 0 16px !important; justify-content: center !important; overflow-x: auto; flex-wrap: nowrap; }
+    .woocommerce-tabs .wc-tabs li a { padding: 12px 14px; font-size: 12px; white-space: nowrap; }
+    .woocommerce-Tabs-panel { padding: 8px 16px 40px !important; }
+}
+
+/* ==========================================================================
+   RELATED PRODUCTS BY CATEGORY
+   ========================================================================== */
+.saltlux-related-products {
+    padding: 40px 40px 56px;
+    background: #f5f5f5;
+}
+
+.saltlux-related-heading {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #111;
+    display: inline-block;
+}
+
+.saltlux-related-products ul.products {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 16px;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none;
+    overflow: hidden;
+}
+
+.saltlux-related-products ul.products li.product {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+.saltlux-related-products ul.products li.product .woocommerce-loop-product__link,
+.saltlux-related-products ul.products li.product .sv2-card__link {
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f7f7f7;
+}
+
+.saltlux-related-products ul.products li.product .woocommerce-loop-product__link img,
+.saltlux-related-products ul.products li.product .sv2-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .saltlux-related-products { padding: 28px 0 40px; }
+    .saltlux-related-products .saltlux-related-heading { margin-left: 16px; margin-right: 16px; }
+    .saltlux-related-products ul.products {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 12px;
+        padding: 0 16px 16px !important;
+    }
+    .saltlux-related-products ul.products::-webkit-scrollbar { display: none; }
+    .saltlux-related-products ul.products li.product {
+        flex: 0 0 calc(47% - 6px) !important;
+        min-width: calc(47% - 6px) !important;
+        scroll-snap-align: start;
+    }
+}
+
+@media (max-width: 600px) {
+    .saltlux-related-products ul.products li.product {
+        flex: 0 0 72% !important;
+        min-width: 72% !important;
+    }
+}
+
+/* ==========================================================================
+   PRODUCT DETAIL ACCORDIONS (summary column)
+   ========================================================================== */
+.saltlux-product-accordions {
+    margin-top: 24px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.saltlux-accordion-item {
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.saltlux-accordion-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #111;
+    text-align: left;
+    transition: color 0.2s, background 0.2s;
+}
+
+.saltlux-accordion-toggle:focus,
+.saltlux-accordion-toggle:focus-visible,
+.saltlux-accordion-toggle:focus:not(:focus-visible),
+.saltlux-accordion-item > button:focus,
+.saltlux-accordion-item > button:focus-visible,
+.saltlux-accordion-item > button:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+.saltlux-accordion-toggle:hover {
+    background: #f0f0f0;
+    color: #111;
+}
+
+.saltlux-accordion-item.is-open > .saltlux-accordion-toggle {
+    background: #111;
+    color: #fff;
+}
+
+.saltlux-accordion-icon {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+
+.saltlux-accordion-item.is-open .saltlux-accordion-icon {
+    transform: rotate(180deg);
+}
+
+.saltlux-accordion-content {
+    padding: 4px 10px 18px;
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #444;
+}
+
+.saltlux-accordion-content p  { margin-bottom: 10px; }
+.saltlux-accordion-content ul { padding-left: 18px; margin-bottom: 10px; }
+.saltlux-accordion-content li { margin-bottom: 4px; }
+.saltlux-accordion-content img { max-width: 100%; height: auto; }
+
+/* ==========================================================================
+   DEALER ACCORDION — featured (priority) card + compact others list
+   ========================================================================== */
+
+/* Remove default accordion padding-bottom so the list sits flush */
+.saltlux-dealer-accordion {
+    padding-bottom: 6px;
+}
+
+/* Featured / priority dealer card */
+.saltlux-dealer-featured {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 16px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 14px;
+}
+
+.saltlux-dealer-featured-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Full-width CTA inside the featured card */
+.saltlux-dealer-cta--block {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    margin-top: 8px;
+    padding: 12px 20px;
+}
+
+/* Compact list for non-priority dealers */
+.saltlux-dealer-others {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.saltlux-dealer-others-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px solid #ebebeb;
+}
+
+.saltlux-dealer-others-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.saltlux-dealer-others-info strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+}
+
+.saltlux-dealer-others-info a {
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+}
+
+.saltlux-dealer-others-info a:hover {
+    color: #111;
+    text-decoration: underline;
+}
+
+.saltlux-dealer-others-link {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #111;
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.saltlux-dealer-others-link:hover {
+    color: #555;
+}
+
+/* ==========================================================================
+   PAIRS WITH SECTION (accordion inside summary)
+   ========================================================================== */
+.sv2-pairs-accordion-content {
+    padding: 8px 0 4px;
+}
+
+.sv2-pairs-accordion-content ul.sv2-pairs-list {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 12px;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none;
+    overflow: hidden;
+}
+
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product .woocommerce-loop-product__link,
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product .sv2-card__link {
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f7f7f7;
+}
+
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product .woocommerce-loop-product__link img,
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product .sv2-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product .woocommerce-loop-product__title {
+    font-size: 12px;
+}
+
+.sv2-pairs-accordion-content ul.sv2-pairs-list li.product .price {
+    font-size: 12px;
+}
+
+@media (max-width: 1024px) {
+    .sv2-pairs-accordion-content ul.sv2-pairs-list {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 10px;
+        padding-bottom: 12px !important;
+    }
+    .sv2-pairs-accordion-content ul.sv2-pairs-list::-webkit-scrollbar { display: none; }
+    .sv2-pairs-accordion-content ul.sv2-pairs-list li.product {
+        flex: 0 0 44% !important;
+        min-width: 44% !important;
+        scroll-snap-align: start;
+    }
+}
+
+@media (max-width: 600px) {
+    .sv2-pairs-accordion-content ul.sv2-pairs-list li.product {
+        flex: 0 0 68% !important;
+        min-width: 68% !important;
+    }
+}
+
+/*# sourceMappingURL=style.css.map */
+
+/* ==========================================================================
+   SITE FOOTER
+   ========================================================================== */
+
+.sl-footer {
+    background: #1a1a1a;
+    color: #c8c8c8;
+    font-size: 13px;
+    margin-top: 0;
+}
+
+.sl-footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Main grid */
+.sl-footer-main {
+    padding: 56px 0 40px;
+}
+
+.sl-footer-main .sl-footer-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+@media (max-width: 900px) {
+    .sl-footer-main .sl-footer-inner {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 24px;
+    }
+}
+
+@media (max-width: 500px) {
+    .sl-footer-main .sl-footer-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+}
+
+/* Column heading */
+.sl-footer-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 16px;
+}
+
+/* Nav menus */
+.sl-footer-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sl-footer-menu li {
+    margin-bottom: 10px;
+}
+
+.sl-footer-menu a {
+    color: #c8c8c8;
+    text-decoration: none;
+    transition: color 0.2s;
+    line-height: 1.4;
+}
+
+.sl-footer-menu a:hover {
+    color: #fff;
+}
+
+/* Contact column */
+.sl-footer-contact .sl-footer-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #c8c8c8;
+    line-height: 1.5;
+}
+
+.sl-footer-contact .sl-footer-contact-item svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    opacity: 0.7;
+}
+
+.sl-footer-contact a {
+    color: #c8c8c8;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sl-footer-contact a:hover {
+    color: #fff;
+}
+
+/* Social icons */
+.sl-footer-social {
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.sl-footer-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    color: #c8c8c8;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.sl-footer-social-link:hover {
+    border-color: #fff;
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+
+/* Bottom bar */
+.sl-footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 16px 0;
+}
+
+.sl-footer-bottom .sl-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sl-footer-copy {
+    font-size: 12px;
+    color: #888;
+    letter-spacing: 0.02em;
+}
+
+/* ── About TaylorMade page ─────────────────────────────────────────── */
+.page-about .elementor-section[data-id="hero001"] {
+    margin-bottom: 0 !important;
+}
+
+/* Sidebar nav dividers */
+.page-about .elementor-icon-list-items {
+    border-top: 1px solid #e0e0e0;
+}
+.page-about .elementor-icon-list-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 11px 0;
+}
+.page-about .elementor-icon-list-item:first-child a {
+    font-weight: 700;
+    color: #000;
+}
+.page-about .elementor-icon-list-item a {
+    display: block;
+    color: #333;
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.18s;
+}
+.page-about .elementor-icon-list-item a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+.page-about .elementor-icon-list-icon {
+    display: none !important;
+}
+
+/* ── Product page: full-width container ────────────────────────────── */
+.sv2-product-fullwidth #primary,
+.sv2-product-fullwidth #content,
+.sv2-product-fullwidth .site-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Remove Astra's container cap — all nested ast-containers */
+.sv2-product-fullwidth .ast-container,
+.sv2-product-fullwidth .site-content > .ast-container,
+.sv2-product-fullwidth #primary > .ast-container,
+.sv2-product-fullwidth #content .ast-container {
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Remove WooCommerce / Astra article wrapper padding — exclude tab panels */
+.sv2-product-fullwidth .ast-article-single,
+.sv2-product-fullwidth .post-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+}
+.sv2-product-fullwidth .entry-content:not(.woocommerce-Tabs-panel) {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+}
+
+/* 2-col layout: gallery + summary get horizontal padding for breathing room */
+.sv2-product-fullwidth .single-product div.product {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.sv2-product-fullwidth .single-product div.product .saltlux-product-gallery {
+    padding: 0 !important;
+}
+
+.sv2-product-fullwidth .single-product div.product .summary.entry-summary {
+    padding: 32px 48px 32px 0 !important;
+}
+
+/* Gray background on everything below the 2-col top section */
+.sv2-product-fullwidth .single-product div.product .saltlux-services-strip,
+.sv2-product-fullwidth .single-product div.product .saltlux-pairs-section,
+.sv2-product-fullwidth .single-product div.product .woocommerce-tabs,
+.sv2-product-fullwidth .single-product div.product .wc-tabs-wrapper,
+.sv2-product-fullwidth .single-product div.product .up-sells,
+.sv2-product-fullwidth .single-product div.product .saltlux-related-products,
+.sv2-product-fullwidth .single-product div.product .related.products {
+    background: #f5f5f5 !important;
+}
+
+@media screen and (max-width: 921px) {
+    .sv2-product-fullwidth .single-product div.product .summary.entry-summary {
+        padding: 24px 16px !important;
+    }
+}
+/* ───────────────────────────────────────────────────────────────────── */
+
+/* ── Fitting & Coaching Section ─────────────────────────────────────── */
+
+/* Section shell */
+.fc-section {
+    width: 100%;
+    padding: 80px 0;
+    background: #fff;
+}
+
+.fc-header {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: 56px;
+    text-align: center;
+}
+
+.fc-section-title {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #0a0a0a;
+    margin: 0 0 16px;
+}
+
+.fc-lede {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #4a4a4a;
+    margin: 0;
+}
+
+/* Row layout */
+.fc-row {
+    display: flex;
+    width: 100%;
+    min-height: 520px;
+    align-items: stretch;
+}
+
+.fc-row--reverse {
+    flex-direction: row-reverse;
+}
+
+/* Content column */
+.fc-content {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 64px;
+    box-sizing: border-box;
+}
+
+/* Image column */
+.fc-image {
+    width: 50%;
+    overflow: hidden;
+    padding: 0;
+}
+
+.fc-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.fc-row:hover .fc-image img {
+    transform: scale(1.03);
+}
+
+/* Alternating row backgrounds */
+.fc-row--1,
+.fc-row--3 {
+    background: #ffffff;
+}
+
+.fc-row--2,
+.fc-row--4 {
+    background: #f5f5f5;
+}
+
+/* Typography */
+.fc-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #888888;
+    margin-bottom: 12px;
+}
+
+.fc-headline {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #0a0a0a;
+    margin-bottom: 20px;
+}
+
+.fc-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #4a4a4a;
+    margin-bottom: 32px;
+}
+
+/* CTA button */
+.fc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    background: transparent;
+    border: 1px solid #0a0a0a;
+    border-radius: 0;
+    text-decoration: none;
+    transition: background 0.24s ease, color 0.24s ease;
+}
+
+.fc-btn:hover,
+.fc-btn:focus-visible {
+    background: #0a0a0a;
+    color: #ffffff;
+}
+
+.fc-btn:focus-visible {
+    outline: 2px solid #0a0a0a;
+    outline-offset: 2px;
+}
+
+/* Reveal helper classes */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+[data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+    .fc-section {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
+    .fc-header {
+        padding: 0 20px 40px;
+    }
+
+    .fc-section-title {
+        font-size: 24px;
+    }
+
+    .fc-row {
+        flex-direction: column !important;
+        min-height: auto;
+    }
+
+    .fc-row .fc-image {
+        order: -1 !important;
+        width: 100% !important;
+        height: 240px !important;
+        min-height: 0 !important;
+    }
+
+    .fc-row .fc-content {
+        width: 100% !important;
+        padding: 32px 20px 40px !important;
+    }
+
+    .fc-headline {
+        font-size: 22px;
+    }
+
+    .fc-btn {
+        width: 100%;
+    }
+	#product-home-gallery {
+		width: 100% !important;
+	}
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .fc-section {
+        padding-top: 64px;
+        padding-bottom: 64px;
+    }
+
+    .fc-content {
+        padding: 40px;
+    }
+
+    .fc-headline {
+        font-size: 26px;
+    }
+
+    .fc-section-title {
+        font-size: 28px;
+    }
+
+    .fc-row {
+        min-height: 420px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .fc-image img {
+        transition: none;
+    }
+
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* ── product-home-gallery: slide card UI ── */
+#product-home-gallery .swiper-slide {
+    position: relative !important;
+    cursor: pointer !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    border: 2px solid #fff !important;
+    transition: border-color 0.3s ease !important;
+}
+#product-home-gallery .swiper-slide:hover {
+    border-color: #111 !important;
+}
+#product-home-gallery .swiper-slide img,
+#product-home-gallery .swiper-slide .swiper-slide-image {
+    transition: transform 0.5s ease !important;
+    display: block;
+    width: 100%;
+}
+#product-home-gallery .swiper-slide:hover img,
+#product-home-gallery .swiper-slide:hover .swiper-slide-image {
+    transform: scale(1.06) !important;
+}
+
+/* Overlay: gradient bg + title + action — luôn hiển thị */
+#product-home-gallery .pgh-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.5)    0%,
+        rgba(0, 0, 0, 0.05)  45%,
+        rgba(0, 0, 0, 0.45) 100%
+    ) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 20px 22px !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+    box-sizing: border-box !important;
+}
+
+/* Tiêu đề — luôn hiển thị */
+#product-home-gallery .pgh-title {
+    color: #fff !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    width: 100% !important;
+	text-align: center !important;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6) !important;
+    margin: 0 !important;
+}
+
+/* Hàng action dưới phải */
+#product-home-gallery .pgh-action {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+}
+
+/* "Khám phá ngay" — ẩn mặc định, slide từ phải sang trái khi hover */
+#product-home-gallery .pgh-cta {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    opacity: 0 !important;
+    transform: translateX(24px) !important;
+    transition: opacity 0.35s ease, transform 0.35s ease !important;
+    white-space: nowrap !important;
+}
+
+/* Nút "+" tròn — outline mặc định */
+#product-home-gallery .pgh-plus {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    border: 2px solid rgba(255,255,255,0.85) !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 22px !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* Hover */
+#product-home-gallery .swiper-slide:hover .pgh-cta {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+#product-home-gallery .swiper-slide:hover .pgh-plus {
+    background: #cc0000 !important;
+    border-color: #cc0000 !important;
+    color: #fff !important;
+}
+/* ───────────────────────────────────────────────────────────────────── */
+
+/* ── Shop / category archive — JP-style listing ─────────────────────── */
+.sv2-shop-archive .ast-archive-entry-banner,
+.sv2-shop-archive #banner-prod-cat {
+    display: none !important;
+}
+
+/* Force single-column layout: category header on top, products below */
+.sv2-shop-fullwidth #secondary,
+.sv2-shop-fullwidth .widget-area,
+.sv2-shop-fullwidth aside#secondary {
+    display: none !important;
+}
+
+.sv2-shop-fullwidth #primary,
+.sv2-shop-fullwidth #content,
+.sv2-shop-fullwidth .site-content,
+.sv2-shop-fullwidth .ast-woocommerce-container,
+.sv2-shop-fullwidth .sv2-shop-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    float: none !important;
+    box-sizing: border-box;
+}
+
+.sv2-shop-fullwidth .site-content > .ast-container,
+.sv2-shop-fullwidth #primary > .ast-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.sv2-shop-fullwidth.ast-plain-container .site-content,
+.sv2-shop-fullwidth.ast-separate-container .site-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.sv2-shop-wrap {
+    width: 100%;
+    max-width: 100%;
+    padding: 32px 48px 48px;
+}
+
+.sv2-shop-fullwidth.ast-right-sidebar #primary,
+.sv2-shop-fullwidth.ast-left-sidebar #primary,
+.sv2-shop-fullwidth.ast-right-sidebar #content,
+.sv2-shop-fullwidth.ast-left-sidebar #content {
+    border: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.sv2-shop-archive.tax-product_cat #content,
+.sv2-shop-archive.post-type-archive-product #content {
+    padding: 0 !important;
+}
+
+@media screen and (min-width: 1441px) {
+    .sv2-shop-wrap {
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+}
+
+@media screen and (max-width: 921px) {
+    .sv2-shop-wrap {
+        padding: 24px 20px 40px;
+    }
+}
+
+.sv2-shop-header {
+    margin-bottom: 28px;
+}
+
+.sv2-shop-header__title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #111;
+    margin: 0 0 12px;
+    text-transform: none;
+}
+
+.sv2-shop-header__desc {
+    max-width: 920px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.sv2-shop-header__desc p:last-child {
+    margin-bottom: 0;
+}
+
+.sv2-shop-subnav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.sv2-shop-subnav__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: #f0f0f0;
+    color: #111;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sv2-shop-subnav__pill:hover,
+.sv2-shop-subnav__pill:focus-visible {
+    background: #ddd;
+    color: #111;
+}
+
+.sv2-shop-subnav__pill.is-active {
+    background: #111;
+    color: #fff;
+}
+
+.sv2-shop-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+/* Safety net: hide Astra's toolbar container if it still renders (our setup removes it) */
+.sv2-shop-fullwidth .ast-shop-toolbar-container {
+    display: none !important;
+}
+
+.sv2-shop-toolbar .woocommerce-ordering {
+    display: block !important;
+    margin: 0 !important;
+    float: none !important;
+}
+
+.sv2-shop-toolbar .woocommerce-result-count {
+    margin: 0;
+    font-size: 13px;
+    color: #555;
+    float: none;
+}
+
+.sv2-shop-toolbar .wcapf-before-products,
+.sv2-shop-toolbar .wcapf-active-filters {
+    margin: 0;
+}
+
+.sv2-shop-toolbar .wcapf-reset-filters-btn,
+.sv2-shop-toolbar .wcapf-filter-toggle,
+.sv2-shop-toolbar .button,
+.sv2-shop-toolbar button {
+    background: #111 !important;
+    color: #fff !important;
+    border: 1px solid #111 !important;
+    border-radius: 0 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 12px 18px !important;
+}
+
+.sv2-shop-archive ul.products {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sv2-shop-archive ul.products::before,
+.sv2-shop-archive ul.products::after {
+    display: none !important;
+}
+
+.sv2-shop-archive ul.products li.product {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    clear: none !important;
+}
+
+.sv2-product-card__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sv2-card__media {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.sv2-card__link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: #f7f7f7;
+    aspect-ratio: 1 / 1;
+}
+
+.sv2-card__image-wrap {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.sv2-card__image-wrap.has-hover .sv2-card__img {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.sv2-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.sv2-card__img--hover {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+}
+
+.sv2-card__link:hover .sv2-card__img--primary,
+.sv2-card__link:focus-visible .sv2-card__img--primary {
+    opacity: 0;
+}
+
+.sv2-card__link:hover .sv2-card__img--hover,
+.sv2-card__link:focus-visible .sv2-card__img--hover {
+    opacity: 1;
+    transform: scale(1.03);
+}
+
+.sv2-card__link:hover .sv2-card__img--primary,
+.sv2-card__link:focus-visible .sv2-card__img--primary {
+    transform: scale(1.03);
+}
+
+.sv2-card__media .onsale {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    margin: 0;
+}
+
+.sv2-card__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.sv2-card__swatch {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.sv2-card__swatch:hover,
+.sv2-card__swatch.is-active {
+    border-color: #111;
+}
+
+.sv2-card__swatch img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sv2-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left !important;
+}
+
+.sv2-card__title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.sv2-card__title a {
+    color: #111;
+    text-decoration: none;
+}
+
+.sv2-card__title a:hover {
+    text-decoration: underline;
+}
+
+.sv2-card__price {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #111 !important;
+    margin: 0 !important;
+}
+
+.sv2-card__price del {
+    color: #999;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.sv2-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 18px;
+}
+
+.sv2-card__rating .star-rating {
+    float: none;
+    margin: 0;
+    font-size: 12px;
+}
+
+.sv2-card__review-count {
+    font-size: 11px;
+    color: #777;
+}
+
+.sv2-card__tagline {
+    margin: 2px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #cc0000;
+}
+
+.sv2-shop-seo {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.sv2-shop-seo__inner {
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+.sv2-shop-seo__inner.is-collapsed {
+    max-height: 180px;
+    position: relative;
+}
+
+.sv2-shop-seo__inner.is-collapsed::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 72px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), #fff);
+    pointer-events: none;
+}
+
+.sv2-shop-seo__inner.is-expanded {
+    max-height: none;
+}
+
+.sv2-shop-seo__inner.is-expanded::after {
+    display: none;
+}
+
+.sv2-shop-seo__content {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #444;
+}
+
+.sv2-shop-seo__toggle {
+    margin-top: 16px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #111;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.sv2-shop-seo__toggle-less {
+    display: none;
+}
+
+.sv2-shop-seo__inner.is-expanded + .sv2-shop-seo__toggle .sv2-shop-seo__toggle-more {
+    display: none;
+}
+
+.sv2-shop-seo__inner.is-expanded + .sv2-shop-seo__toggle .sv2-shop-seo__toggle-less {
+    display: inline;
+}
+
+.sv2-shop-seo.is-static .sv2-shop-seo__toggle {
+    display: none;
+}
+
+@media screen and (max-width: 1200px) {
+    .sv2-shop-archive ul.products {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 921px) {
+    .sv2-shop-archive ul.products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 16px;
+    }
+
+    .sv2-shop-header__title {
+        font-size: 24px;
+    }
+
+    .sv2-shop-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 544px) {
+    .sv2-shop-archive ul.products {
+        grid-template-columns: 1fr;
+    }
+
+    .sv2-shop-subnav__pill {
+        font-size: 11px;
+        padding: 7px 14px;
+    }
+}
+
+/* ── UAEL gallery caption: below image ──────────────────────────────────── */
+.uael-grid-caption-text {
+    white-space: nowrap;
+}
+
+.slick-dots {
+    bottom: -70px !important;
+}
+
+.uael-grid-item .uael-grid-img-content {
+    bottom: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.uael-grid-item-content {
+    position: relative;
+    overflow: visible !important;
+}
+
+.uael-grid-img-content {
+    position: absolute;
+    width: 100%;
+    bottom: -50px;
+    z-index: 20;
+    margin-top: 50px;
+}
+
+/* ── Homepage 3-panel banner ─────────────────────────────────────────── */
+.sv2-home-panels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    width: 100%;
+}
+
+.sv2-home-panels__item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    text-decoration: none;
+}
+
+.sv2-home-panels__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.sv2-home-panels__item:hover .sv2-home-panels__img {
+    transform: scale(1.05);
+}
+
+.sv2-home-panels__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.08) 50%, transparent 100%);
+    pointer-events: none;
+}
+
+.sv2-home-panels__title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 24px 16px;
+    line-height: 1.3;
+}
+
+@media screen and (max-width: 768px) {
+    .sv2-home-panels {
+        grid-template-columns: 1fr;
+    }
+
+    .sv2-home-panels__item {
+        aspect-ratio: 16 / 9;
+    }
+
+    .sv2-home-panels__title {
+        font-size: 16px;
+        padding: 16px 12px;
+    }
+}
+
+/* Fake star rating */
+.sv2-fake-rating {
+    padding: 8px 0 4px;
+}
+
+.sv2-fake-stars {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sv2-star {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.sv2-star--full,
+.sv2-star--half {
+    color: #c8a951;
+}
+
+.sv2-star--empty {
+    color: #d0d0d0;
+}
+
+.sv2-fake-count {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+/* Hide Add to Cart button and header cart icon */
+.single-product button.single_add_to_cart_button,
+.single-product .woocommerce-variation-add-to-cart .single_add_to_cart_button {
+    display: none !important;
+}
+
+.ast-site-header-cart,
+.ast-header-woo-cart,
+.single_variation_wrap,
+.sl-header-cart {
+    display: none !important;
+}
+.tabs.wc-tabs {
+	justify-content: center !important;
+}
+
+/* ── Home carousels: mobile peek 1.2 items ── */
+@media (max-width: 767px) {
+    /* Clip at section level; let inner Swiper layers overflow so peek is visible */
+    #product-home-gallery,
+    #home-prod-carousel {
+        overflow: hidden;
+    }
+    #product-home-gallery .elementor-swiper,
+    #product-home-gallery .elementor-image-carousel-wrapper,
+    #product-home-gallery .elementor-main-swiper,
+    #product-home-gallery .elementor-carousel-swiper,
+    #product-home-gallery .swiper,
+    #product-home-gallery .swiper-container,
+    #home-prod-carousel .elementor-swiper,
+    #home-prod-carousel .elementor-image-carousel-wrapper,
+    #home-prod-carousel .elementor-main-swiper,
+    #home-prod-carousel .elementor-carousel-swiper,
+    #home-prod-carousel .swiper,
+    #home-prod-carousel .swiper-container {
+        overflow: visible !important;
+    }
+	/* ── Home carousels: pagination dots spacing ── */
+	.elementor-element :where(.swiper-horizontal)~.swiper-pagination-bullets .swiper-pagination-bullet,
+	.swiper-pagination-bullet {
+    	margin: 0 6px !important;
+	}
+}
+
+/* ───────────────────────────────────────────────────────────────────── */
