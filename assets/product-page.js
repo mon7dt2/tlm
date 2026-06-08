@@ -287,6 +287,11 @@ jQuery(function ($) {
                 });
                 if (!anySelected) { restoreGallery(); return; }
 
+                // Collect images from ALL variations that match chosen attributes.
+                // A variation attribute of '' means "any value" — still a match.
+                // This ensures selecting only color (without size) gathers every
+                // size variant's images for that color into one gallery.
+                var seenSrc = {}, allImages = [];
                 for (var i = 0; i < variations.length; i++) {
                     var v = variations[i];
                     var ok = true;
@@ -296,7 +301,25 @@ jQuery(function ($) {
                             ok = false; break;
                         }
                     }
-                    if (ok) { applyVariantGallery(v); return; }
+                    if (!ok) continue;
+
+                    // Main variation image
+                    if (v.image && v.image.src && !seenSrc[v.image.src]) {
+                        seenSrc[v.image.src] = true;
+                        allImages.push(v.image);
+                    }
+                    // Extra gallery images
+                    var extras = v.gallery_images || [];
+                    for (var j = 0; j < extras.length; j++) {
+                        if (extras[j] && extras[j].src && !seenSrc[extras[j].src]) {
+                            seenSrc[extras[j].src] = true;
+                            allImages.push(extras[j]);
+                        }
+                    }
+                }
+
+                if (allImages.length) {
+                    applyVariantGallery({ image: allImages[0], gallery_images: allImages.slice(1) });
                 }
             });
 
