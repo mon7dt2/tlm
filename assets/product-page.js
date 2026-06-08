@@ -273,59 +273,90 @@ jQuery(function ($) {
             }
         }
 
+        /**
+         * Gom ảnh từ TẤT CẢ variations khớp với `chosen` (màu + bất kỳ size).
+         * `chosen` = { 'attribute_pa_color': 'xanh-la', 'attribute_pa_size': '' }
+         * Attribute rỗng ('') = chưa chọn → bỏ qua khi so khớp.
+         * Trả về mảng image objects đã dedup theo src.
+         */
+        function collectColorImages($form, chosen) {
+            var variations = $form.data('product_variations');
+            if (!variations || !variations.length) return [];
+
+            // Xác định key màu sắc: attribute có tên chứa "color" hoặc "colour" hoặc "mau"
+            // Nếu không tìm thấy, dùng toàn bộ chosen (fallback).
+            var colorKey = null;
+            for (var k in chosen) {
+                if (chosen.hasOwnProperty(k) && /colou?r|mau|color/i.test(k)) {
+                    colorKey = k; break;
+                }
+            }
+
+            // Tạo bộ lọc: chỉ match theo thuộc tính màu (bỏ qua size/attributes khác)
+            var filterKeys = {};
+            if (colorKey && chosen[colorKey]) {
+                filterKeys[colorKey] = chosen[colorKey];
+            } else {
+                // fallback: dùng mọi attribute đã chọn
+                for (var key in chosen) {
+                    if (chosen.hasOwnProperty(key) && chosen[key]) filterKeys[key] = chosen[key];
+                }
+            }
+
+            var seenSrc = {}, allImages = [];
+            for (var i = 0; i < variations.length; i++) {
+                var v = variations[i];
+                var ok = true;
+                for (var fk in filterKeys) {
+                    if (!filterKeys.hasOwnProperty(fk)) continue;
+                    if (v.attributes[fk] !== '' && v.attributes[fk] !== filterKeys[fk]) {
+                        ok = false; break;
+                    }
+                }
+                if (!ok) continue;
+
+                if (v.image && v.image.src && !seenSrc[v.image.src]) {
+                    seenSrc[v.image.src] = true;
+                    allImages.push(v.image);
+                }
+                var extras = v.gallery_images || [];
+                for (var j = 0; j < extras.length; j++) {
+                    if (extras[j] && extras[j].src && !seenSrc[extras[j].src]) {
+                        seenSrc[extras[j].src] = true;
+                        allImages.push(extras[j]);
+                    }
+                }
+            }
+            return allImages;
+        }
+
+        function applyColorGallery($form, chosen) {
+            var images = collectColorImages($form, chosen);
+            if (!images.length) return;
+            applyVariantGallery({ image: images[0], gallery_images: images.slice(1) });
+        }
+
         function bindVariationForm($form) {
             $form.off('found_variation.sv2 reset_data.sv2 change.sv2gallery');
 
             $form.on('change.sv2gallery', 'select[name^="attribute_"]', function () {
-                var variations = $form.data('product_variations');
-                if (!variations || !variations.length) return;
-
                 var chosen = {}, anySelected = false;
                 $form.find('select[name^="attribute_"]').each(function () {
                     chosen[this.name] = this.value;
                     if (this.value) anySelected = true;
                 });
                 if (!anySelected) { restoreGallery(); return; }
-
-                // Collect images from ALL variations that match chosen attributes.
-                // A variation attribute of '' means "any value" — still a match.
-                // This ensures selecting only color (without size) gathers every
-                // size variant's images for that color into one gallery.
-                var seenSrc = {}, allImages = [];
-                for (var i = 0; i < variations.length; i++) {
-                    var v = variations[i];
-                    var ok = true;
-                    for (var key in chosen) {
-                        if (!chosen.hasOwnProperty(key) || !chosen[key]) continue;
-                        if (v.attributes[key] !== '' && v.attributes[key] !== chosen[key]) {
-                            ok = false; break;
-                        }
-                    }
-                    if (!ok) continue;
-
-                    // Main variation image
-                    if (v.image && v.image.src && !seenSrc[v.image.src]) {
-                        seenSrc[v.image.src] = true;
-                        allImages.push(v.image);
-                    }
-                    // Extra gallery images
-                    var extras = v.gallery_images || [];
-                    for (var j = 0; j < extras.length; j++) {
-                        if (extras[j] && extras[j].src && !seenSrc[extras[j].src]) {
-                            seenSrc[extras[j].src] = true;
-                            allImages.push(extras[j]);
-                        }
-                    }
-                }
-
-                if (allImages.length) {
-                    applyVariantGallery({ image: allImages[0], gallery_images: allImages.slice(1) });
-                }
+                applyColorGallery($form, chosen);
             });
 
+            // found_variation cũng gom theo màu thay vì dùng đơn lẻ variation
             $form.on('found_variation.sv2', function (e, variation) {
                 if (!variation) return;
-                applyVariantGallery(variation);
+                var chosen = {};
+                $form.find('select[name^="attribute_"]').each(function () {
+                    chosen[this.name] = this.value;
+                });
+                applyColorGallery($form, chosen);
             });
 
             $form.on('reset_data.sv2', function () {
