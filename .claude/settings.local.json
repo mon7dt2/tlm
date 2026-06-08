@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(Get-ChildItem -Path \"E:\\\\Code\\\\php\\\\tlm\" -Recurse -File)",
-      "Bash(Select-Object -First 20)"
+      "Bash(Select-Object -First 20)",
+      "Bash(git -C /c/Users/84368/WebstormProjects/tlm add .gitignore)",
+      "Bash(git -C /c/Users/84368/WebstormProjects/tlm commit -m ' *)",
+      "Bash(git -C /c/Users/84368/WebstormProjects/tlm status)",
+      "Bash(git -C /c/Users/84368/WebstormProjects/tlm diff)",
+      "Bash(git -C /c/Users/84368/WebstormProjects/tlm add .claude/settings.local.json)"
     ]
   }
 }
