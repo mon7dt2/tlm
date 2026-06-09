@@ -170,15 +170,7 @@ function sv2_render_single_post() {
         <!-- ── Article body ── -->
         <div class="sp-body" itemprop="articleBody">
             <div class="sp-container entry-content">
-				<?php
-            if ( function_exists( 'get_field' ) && function_exists( 'sv2_render_post_product_block' ) ) {
-                $pp = get_field( 'post_featured_product' );
-                if ( $pp && is_a( $pp, 'WP_Post' ) ) {
-                    echo sv2_render_post_product_block( $pp ); // phpcs:ignore WordPress.Security.EscapeOutput
-                }
-            }
-            ?>
-                <?php the_content(); ?>
+	                <?php the_content(); ?>
             </div>
         </div>
 

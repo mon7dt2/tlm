@@ -19,7 +19,7 @@ add_action( 'acf/include_fields', function() {
                 'label'         => 'Sản phẩm',
                 'name'          => 'post_featured_product',
                 'type'          => 'post_object',
-                'instructions'  => 'Chọn sản phẩm để hiển thị trong nội dung bài viết kèm nút "Tìm gần tôi".',
+                'instructions'  => 'Chọn sản phẩm rồi dùng shortcode [post_product id="ID_SẢN_PHẨM"] để chèn card sản phẩm vào bất kỳ vị trí nào trong nội dung bài viết.',
                 'required'      => 0,
                 'post_type'     => array( 'product' ),
                 'taxonomy'      => '',
@@ -127,13 +127,39 @@ function sv2_render_post_product_block( $product_post ) {
 }
 
 // ---------------------------------------------------------------------------
+// Shortcode: [post_product id="123"]
+// ---------------------------------------------------------------------------
+add_shortcode( 'post_product', function( $atts ) {
+    $atts = shortcode_atts( array( 'id' => 0 ), $atts, 'post_product' );
+    $id   = absint( $atts['id'] );
+    if ( ! $id ) {
+        return '';
+    }
+    $product_post = get_post( $id );
+    if ( ! $product_post || $product_post->post_type !== 'product' ) {
+        return '';
+    }
+    sv2_post_product_enqueue_assets();
+    return sv2_render_post_product_block( $product_post );
+} );
+
+// ---------------------------------------------------------------------------
 // Enqueue CSS on single posts
 // ---------------------------------------------------------------------------
-add_action( 'wp_enqueue_scripts', function() {
-    if ( ! is_singular( 'post' ) ) {
+function sv2_post_product_enqueue_assets() {
+    static $enqueued = false;
+    if ( $enqueued ) {
         return;
     }
     $uri = get_stylesheet_directory_uri();
     $ver = wp_get_theme()->get( 'Version' );
     wp_enqueue_style( 'sv2-post-product', $uri . '/assets/css/post-product.css', array( 'child-style' ), $ver );
+    $enqueued = true;
+}
+
+add_action( 'wp_enqueue_scripts', function() {
+    if ( ! is_singular( 'post' ) ) {
+        return;
+    }
+    sv2_post_product_enqueue_assets();
 } );
