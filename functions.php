@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/inc/config.php';
 
+
 function sv2_page_has_shortcode( $tag ) {
     if ( ! is_singular() ) return false;
     $post = get_queried_object();
