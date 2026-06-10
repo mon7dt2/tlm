@@ -2,7 +2,7 @@
 Theme Name: Saltlux V2
 Theme URI: https://gitlab.com/nguyenducquang
 Description: Saltlux V2 — dealer locator + KOL/Tour Players
-Version: 2.14.1
+Version: 2.14.2
 Author: QuangND
 Author URI: https://gitlab.com/nguyenducquang
 Template: astra
@@ -2875,6 +2875,16 @@ p.wll-preview-point_for_purchase-description.text-sm.font-normal.text-light {
     /* Clip at section level; let inner Swiper layers overflow so peek is visible */
     #product-home-gallery,
     #home-prod-carousel {
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    /* Border radius trên từng slide để giữ rounded khi peek */
+    #home-prod-carousel .swiper-slide,
+    #home-prod-carousel .swiper-slide img,
+    #home-prod-carousel .elementor-carousel-image,
+    #home-prod-carousel .elementor-image-carousel-image {
+        border-radius: 20px;
         overflow: hidden;
     }
     #product-home-gallery .elementor-swiper,

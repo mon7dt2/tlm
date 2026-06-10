@@ -549,18 +549,38 @@ body.sl-mega-body-open .sl-mega-backdrop { display: block; }
 @media (max-width: 767px) {
     :root { --sl-hdr-h: 54px; }
 
+    /* Grid 2 cột bằng nhau: [hamburger | icon] — logo absolute ở chính giữa */
     .sl-header-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
         padding: 0;
         gap: 0;
+        position: relative;
     }
 
     .sl-header-left {
-        flex: 1;
-        gap: 12px;
-        padding: 0 12px 0 8px;
+        display: flex;
+        align-items: center;
+        padding-left: 8px;
+        gap: 0;
     }
 
-    .sl-header-right { padding-right: 8px; }
+    .sl-header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
+        margin-left: 0;
+    }
+
+    /* Logo tách ra khỏi flow, căn chính giữa thanh header */
+    .sl-logo-link {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
 
     .sl-logo-link img,
     .sl-logo-link .custom-logo { height: 22px; }
