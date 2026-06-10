@@ -124,24 +124,25 @@ if ( ! empty( $_promo_slides ) ) :
     <!-- ─── Main bar ─── -->
     <div class="sl-header-bar">
 
-        <!-- Left: hamburger + logo -->
+        <!-- Left: hamburger only -->
         <div class="sl-header-left">
             <button class="sl-hamburger" id="sl-hamburger"
                     aria-expanded="false" aria-controls="sl-mega" aria-label="Mở menu">
                 <span></span><span></span><span></span>
                 <span class="sl-hamburger-label">MENU</span>
             </button>
-
-            <a class="sl-logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php bloginfo( 'name' ); ?>">
-                <?php
-                if ( has_custom_logo() ) {
-                    the_custom_logo();
-                } else {
-                    echo '<span class="sl-logo-text">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
-                }
-                ?>
-            </a>
         </div>
+
+        <!-- Logo: direct grid/flex child — căn giữa trên mobile, kế hamburger trên desktop -->
+        <a class="sl-logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php bloginfo( 'name' ); ?>">
+            <?php
+            if ( has_custom_logo() ) {
+                the_custom_logo();
+            } else {
+                echo '<span class="sl-logo-text">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+            }
+            ?>
+        </a>
 
         <!-- Center: search (desktop) -->
         <div class="sl-header-center">
