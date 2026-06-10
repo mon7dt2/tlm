@@ -134,15 +134,17 @@ if ( ! empty( $_promo_slides ) ) :
         </div>
 
         <!-- Logo: direct grid/flex child — căn giữa trên mobile, kế hamburger trên desktop -->
-        <a class="sl-logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php bloginfo( 'name' ); ?>">
+        <div class="sl-logo-link">
             <?php
             if ( has_custom_logo() ) {
-                the_custom_logo();
+                the_custom_logo(); // outputs <a class="custom-logo-link"> — không nest anchor
             } else {
-                echo '<span class="sl-logo-text">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+                echo '<a class="sl-logo-text-link" href="' . esc_url( home_url( '/' ) ) . '" aria-label="' . esc_attr( get_bloginfo( 'name' ) ) . '">'
+                   . '<span class="sl-logo-text">' . esc_html( get_bloginfo( 'name' ) ) . '</span>'
+                   . '</a>';
             }
             ?>
-        </a>
+        </div>
 
         <!-- Center: search (desktop) -->
         <div class="sl-header-center">

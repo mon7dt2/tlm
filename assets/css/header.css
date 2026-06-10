@@ -205,12 +205,18 @@
 .sl-mega-open .sl-hamburger span:nth-child(2) { opacity: 0; }
 .sl-mega-open .sl-hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* Logo */
+/* Logo wrapper (div) + inner anchor từ the_custom_logo() */
 .sl-logo-link {
     display: flex;
     align-items: center;
-    text-decoration: none;
     flex-shrink: 0;
+}
+
+.sl-logo-link .custom-logo-link,
+.sl-logo-link .sl-logo-text-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .sl-logo-link img,
