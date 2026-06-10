@@ -1418,13 +1418,19 @@ p.wll-preview-point_for_purchase-description.text-sm.font-normal.text-light {
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         gap: 12px;
-        padding: 0 16px 16px !important;
+        /* Dùng padding-right cho item cuối, KHÔNG dùng padding-left vì Safari bỏ qua */
+        padding: 0 16px 16px 0 !important;
+        scroll-padding-left: 16px;
     }
     .saltlux-related-products ul.products::-webkit-scrollbar { display: none; }
     .saltlux-related-products ul.products li.product {
         flex: 0 0 calc(47% - 6px) !important;
         min-width: calc(47% - 6px) !important;
         scroll-snap-align: start;
+    }
+    /* margin-left trên item đầu hoạt động đúng trên mọi browser kể cả Safari */
+    .saltlux-related-products ul.products li.product:first-child {
+        margin-left: 16px !important;
     }
 }
 

@@ -445,3 +445,37 @@ add_action(
     },
     100
 );
+
+// ── Product permalink: force slug = 'san-pham' ─────────────────────────────
+// Priority PHP_INT_MAX đảm bảo chạy SAU mọi plugin (Rank Math, WPML, v.v.)
+add_filter( 'pre_option_woocommerce_permalinks', function () {
+    return [
+        'product_base'           => 'san-pham',
+        'category_base'          => '',
+        'tag_base'               => '',
+        'attribute_base'         => '',
+        'use_verbose_page_rules' => '',
+    ];
+}, PHP_INT_MAX );
+
+// Belt-and-suspenders: ghi thẳng vào $wp_post_types sau khi WC đăng ký (priority 5).
+add_action( 'init', function () {
+    global $wp_post_types;
+    if ( ! isset( $wp_post_types['product'] ) ) return;
+    $wp_post_types['product']->rewrite = [
+        'slug'       => 'san-pham',
+        'with_front' => false,
+        'feeds'      => true,
+        'ep_mask'    => EP_PERMALINK,
+    ];
+}, 99 );
+
+// Flush rewrite rules mỗi khi version thay đổi.
+add_action( 'init', function () {
+    $flag = 'sv2_pf_v3';
+    if ( get_transient( $flag ) ) return;
+    delete_transient( 'sv2_pf_v1' );
+    delete_transient( 'sv2_pf_v2' );
+    flush_rewrite_rules( true );
+    set_transient( $flag, 1, MONTH_IN_SECONDS );
+}, 100 );
