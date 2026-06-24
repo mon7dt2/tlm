@@ -434,35 +434,33 @@ function sv2_product_accordions() {
     $sections = array();
     $dealers  = array();
 
-    if ( $is_clothing ) {
-        $acf = function( $key ) use ( $pid ) {
-            return function_exists( 'get_field' )
-                ? get_field( $key, $pid )
-                : get_post_meta( $pid, $key, true );
-        };
+    $acf = function( $key ) use ( $pid ) {
+        return function_exists( 'get_field' )
+            ? get_field( $key, $pid )
+            : get_post_meta( $pid, $key, true );
+    };
 
-        foreach ( array(
-            'product_details'     => __( 'Chi tiết', 'saltlux' ),
-            'product_fabric_tech' => __( 'Vải & công nghệ', 'saltlux' ),
-            'product_care'        => __( 'Thông tin chăm sóc / giặt', 'saltlux' ),
-        ) as $field => $label ) {
-            $value = $acf( $field );
-            if ( $value ) {
-                $sections[] = array( 'title' => $label, 'content' => $value );
-            }
+    foreach ( array(
+        'product_details'     => __( 'Chi tiết', 'saltlux' ),
+        'product_fabric_tech' => __( 'Vải & công nghệ', 'saltlux' ),
+        'product_care'        => __( 'Thông tin chăm sóc / giặt', 'saltlux' ),
+    ) as $field => $label ) {
+        $value = $acf( $field );
+        if ( $value ) {
+            $sections[] = array( 'title' => $label, 'content' => $value );
         }
+    }
 
-        // Dealer rows — stored as ACF repeater postmeta
-        $dealer_count = (int) get_post_meta( $pid, 'product_dealers', true );
-        for ( $i = 0; $i < $dealer_count; $i++ ) {
-            $name = get_post_meta( $pid, "product_dealers_{$i}_dealer_name", true );
-            if ( ! $name ) continue;
-            $dealers[] = array(
-                'name'  => $name,
-                'phone' => get_post_meta( $pid, "product_dealers_{$i}_dealer_phone", true ),
-                'link'  => get_post_meta( $pid, "product_dealers_{$i}_dealer_link",  true ),
-            );
-        }
+    // Dealer rows — stored as ACF repeater postmeta
+    $dealer_count = (int) get_post_meta( $pid, 'product_dealers', true );
+    for ( $i = 0; $i < $dealer_count; $i++ ) {
+        $name = get_post_meta( $pid, "product_dealers_{$i}_dealer_name", true );
+        if ( ! $name ) continue;
+        $dealers[] = array(
+            'name'  => $name,
+            'phone' => get_post_meta( $pid, "product_dealers_{$i}_dealer_phone", true ),
+            'link'  => get_post_meta( $pid, "product_dealers_{$i}_dealer_link",  true ),
+        );
     }
 
     // "Kết hợp tốt với" — all products

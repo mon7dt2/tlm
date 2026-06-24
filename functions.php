@@ -17,9 +17,16 @@ function sv2_enqueue_styles() {
     $uri = get_stylesheet_directory_uri();
     $ver = wp_get_theme()->get( 'Version' );
 
+    // Each theme stylesheet is enqueued with NO dependency on another handle.
+    // Rationale: WP_Dependencies refuses to print a style whose dep isn't in the
+    // queue, so chaining everything behind 'child-style'/'style' made the whole
+    // theme CSS a single point of failure — if an asset optimizer / cache combine
+    // (SpeedyCache) or Elementor's asset pipeline drops the base handle, every
+    // dependent stylesheet vanishes with it. Decoupled, each file stands alone;
+    // cascade order is preserved by enqueue order (style → child-style → rest).
     wp_enqueue_style( 'style',       get_template_directory_uri() . '/style.css', [], $ver );
-    wp_enqueue_style( 'child-style', $uri . '/style.css', [ 'style' ], $ver );
-    wp_enqueue_style( 'sv2-header',  $uri . '/assets/css/header.css', [ 'child-style' ], $ver );
+    wp_enqueue_style( 'child-style', $uri . '/style.css', [], $ver );
+    wp_enqueue_style( 'sv2-header',  $uri . '/assets/css/header.css', [], $ver );
     wp_enqueue_script( 'sv2-header', $uri . '/assets/js/header.js', [], $ver, true );
     wp_enqueue_script( 'saltlux-v2', $uri . '/assets/custom.js', [ 'jquery' ], $ver, true );
 
@@ -451,7 +458,7 @@ add_action(
 add_filter( 'pre_option_woocommerce_permalinks', function () {
     return [
         'product_base'           => 'san-pham',
-        'category_base'          => '',
+        'category_base'          => 'sv2cat',
         'tag_base'               => '',
         'attribute_base'         => '',
         'use_verbose_page_rules' => '',
@@ -472,10 +479,79 @@ add_action( 'init', function () {
 
 // Flush rewrite rules mỗi khi version thay đổi.
 add_action( 'init', function () {
-    $flag = 'sv2_pf_v3';
+    $flag = 'sv2_pf_v5';
     if ( get_transient( $flag ) ) return;
     delete_transient( 'sv2_pf_v1' );
     delete_transient( 'sv2_pf_v2' );
+    delete_transient( 'sv2_pf_v3' );
+    delete_transient( 'sv2_pf_v4' );
     flush_rewrite_rules( true );
     set_transient( $flag, 1, MONTH_IN_SECONDS );
 }, 100 );
+
+// Chặn WordPress redirect_canonical kéo /san-pham/slug/ hoặc /category-slug/ về URL cũ
+add_filter( 'redirect_canonical', function ( $redirect_url, $requested_url ) {
+    if ( str_contains( $requested_url, '/san-pham/' ) ) {
+        return false;
+    }
+    // Không redirect URL danh mục sạch về /sv2cat/…
+    if ( $redirect_url && str_contains( $redirect_url, '/sv2cat/' ) ) {
+        return false;
+    }
+    return $redirect_url;
+}, 10, 2 );
+
+// Auto 301 redirect: /ten-san-pham/ → /san-pham/ten-san-pham/
+// Tự build URL từ post_name thay vì get_permalink() để tránh phụ thuộc vào rewrite rules.
+add_action( 'template_redirect', function () {
+    if ( ! is_singular( 'product' ) ) return;
+
+    // Nếu URL hiện tại đã có /san-pham/ → không làm gì
+    if ( str_contains( $_SERVER['REQUEST_URI'], '/san-pham/' ) ) return;
+
+    global $post;
+    if ( empty( $post->post_name ) ) return;
+
+    $new_url = home_url( '/san-pham/' . $post->post_name . '/' );
+    wp_redirect( $new_url, 301 );
+    exit;
+} );
+
+// ── Xoá hoàn toàn prefix khỏi URL danh mục sản phẩm ─────────────────────────
+// 'sv2cat' là base nội bộ WooCommerce dùng để đăng ký rewrite, không hiện ra ngoài.
+
+// Ẩn base nội bộ khỏi mọi link term_link trả về
+add_filter( 'term_link', function ( $link, $term, $taxonomy ) {
+    if ( $taxonomy !== 'product_cat' ) return $link;
+    return str_replace( '/sv2cat/', '/', $link );
+}, 10, 3 );
+
+// Thêm rewrite rule cho từng danh mục theo đường dẫn đầy đủ (parent/child)
+add_action( 'init', function () {
+    $terms = get_terms( [ 'taxonomy' => 'product_cat', 'hide_empty' => false ] );
+    if ( is_wp_error( $terms ) || empty( $terms ) ) return;
+
+    foreach ( $terms as $term ) {
+        $ancestors = array_reverse( get_ancestors( $term->term_id, 'product_cat' ) );
+        $parts     = [];
+        foreach ( $ancestors as $anc_id ) {
+            $anc = get_term( $anc_id, 'product_cat' );
+            if ( $anc && ! is_wp_error( $anc ) ) {
+                $parts[] = preg_quote( $anc->slug, '/' );
+            }
+        }
+        $parts[] = preg_quote( $term->slug, '/' );
+        $path    = implode( '/', $parts );
+        $slug    = $term->slug;
+
+        add_rewrite_rule( '^' . $path . '/?$',
+            'index.php?product_cat=' . $slug, 'top' );
+        add_rewrite_rule( '^' . $path . '/page/([0-9]+)/?$',
+            'index.php?product_cat=' . $slug . '&paged=$matches[1]', 'top' );
+    }
+}, 20 );
+
+// Flush rewrite rules khi thêm/sửa/xoá danh mục
+foreach ( [ 'created_product_cat', 'edited_product_cat', 'delete_product_cat' ] as $sv2_hook ) {
+    add_action( $sv2_hook, static function () { flush_rewrite_rules( false ); } );
+}

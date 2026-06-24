@@ -153,7 +153,9 @@ function sv2_post_product_enqueue_assets() {
     }
     $uri = get_stylesheet_directory_uri();
     $ver = wp_get_theme()->get( 'Version' );
-    wp_enqueue_style( 'sv2-post-product', $uri . '/assets/css/post-product.css', array( 'child-style' ), $ver );
+    // No dep on 'child-style' — keep this standalone so an asset optimizer / cache
+    // combine dropping the base handle can't take this stylesheet down with it.
+    wp_enqueue_style( 'sv2-post-product', $uri . '/assets/css/post-product.css', array(), $ver );
     $enqueued = true;
 }
 

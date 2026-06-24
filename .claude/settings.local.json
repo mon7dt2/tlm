@@ -10,7 +10,10 @@
       "Bash(git -C /c/Users/84368/WebstormProjects/tlm add .claude/settings.local.json)",
       "Bash(git -C /c/Users/84368/WebstormProjects/tlm add assets/product-page.js)",
       "Bash(git -C /c/Users/84368/WebstormProjects/tlm add assets/product-page.js inc/product-page.php)",
-      "Bash(cd \"C:\\\\code\\\\php\" && ls -la | grep -i \"tlm\\\\|db\\\\|sql\\\\|export\")"
+      "Bash(cd \"C:\\\\code\\\\php\" && ls -la | grep -i \"tlm\\\\|db\\\\|sql\\\\|export\")",
+      "Bash(php -l functions.php)",
+      "Bash(php -l inc/post-product.php)",
+      "Bash(php -l inc/single-post.php)"
     ]
   }
 }

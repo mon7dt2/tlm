@@ -11,8 +11,9 @@ add_action( 'wp_enqueue_scripts', function () {
     if ( ! is_singular( 'post' ) ) return;
     $uri = get_stylesheet_directory_uri();
     $ver = wp_get_theme()->get( 'Version' );
-    wp_enqueue_style( 'sv2-single-post', $uri . '/assets/css/single-post.css', array( 'child-style' ), $ver );
-    wp_enqueue_style( 'sv2-news-archive', $uri . '/assets/css/news-archive.css', array( 'child-style' ), $ver );
+    // No dep on 'child-style' — standalone so a dropped base handle can't cascade-remove these.
+    wp_enqueue_style( 'sv2-single-post', $uri . '/assets/css/single-post.css', array(), $ver );
+    wp_enqueue_style( 'sv2-news-archive', $uri . '/assets/css/news-archive.css', array(), $ver );
 } );
 
 // ── Body class ────────────────────────────────────────────────────────────

@@ -561,6 +561,30 @@ p.wll-preview-point_for_purchase-description.text-sm.font-normal.text-light {
     aspect-ratio: 4 / 3;
 }
 
+/* ── ≤4 images (desktop): static 2-up grid, row flow, NO horizontal scroll ──
+   Column-flow + scroll is only meaningful with >4 images. With 2–4 images
+   the column flow renders a vertical strip (2 imgs = one column); instead we
+   want a 2×2 grid filling left-to-right. data-count is kept in sync by JS on
+   variant change, so this also covers variants that drop to ≤4 images. */
+@media screen and (min-width: 922px) {
+    .saltlux-product-gallery[data-count="2"],
+    .saltlux-product-gallery[data-count="3"],
+    .saltlux-product-gallery[data-count="4"] {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: none;
+        grid-auto-rows: 1fr;
+        grid-auto-columns: auto;
+        aspect-ratio: auto;
+        overflow: visible;
+    }
+    /* 3 images: last (odd) image spans the full width on its own row */
+    .saltlux-product-gallery[data-count="3"] .saltlux-gallery-item--last-odd {
+        grid-column: 1 / -1;
+        aspect-ratio: 2 / 1;
+    }
+}
+
 /* Mobile: 1-up snap slider — reset desktop aspect-ratio */
 @media screen and (max-width: 921px) {
     .saltlux-product-gallery {
@@ -2906,6 +2930,16 @@ p.wll-preview-point_for_purchase-description.text-sm.font-normal.text-light {
 	.swiper-pagination-bullet {
     	margin: 0 6px !important;
 	}
+}
+
+/* ── Showcase mode: ẩn giá toàn site ─────────────────────────────────
+   Để bật lại giá: xoá hoặc comment block này.
+   ──────────────────────────────────────────────────────────────────── */
+.price,
+.woocommerce-Price-amount,
+.sv2-card__price,
+.sv2-pp-price {
+    display: none !important;
 }
 
 /* ───────────────────────────────────────────────────────────────────── */
