@@ -13,7 +13,9 @@
       "Bash(cd \"C:\\\\code\\\\php\" && ls -la | grep -i \"tlm\\\\|db\\\\|sql\\\\|export\")",
       "Bash(php -l functions.php)",
       "Bash(php -l inc/post-product.php)",
-      "Bash(php -l inc/single-post.php)"
+      "Bash(php -l inc/single-post.php)",
+      "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\code\\\\php\\\\tlm' -Recurse -Directory | Select-Object -ExpandProperty Name\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\code\\\\php' -Directory | Select-Object -ExpandProperty Name | head -20\")"
     ]
   }
 }

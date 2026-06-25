@@ -772,27 +772,52 @@ function sv2_related_by_category() {
     $terms = get_the_terms( $product->get_id(), 'product_cat' );
     if ( ! $terms || is_wp_error( $terms ) ) return;
 
-    $related = new WP_Query( array(
+    // Ưu tiên danh mục lá (cụ thể nhất) — tránh kết quả quá rộng từ danh mục cha
+    $all_ids  = wp_list_pluck( $terms, 'term_id' );
+    $leaf_ids = array();
+    foreach ( $terms as $term ) {
+        $children_in_assigned = array_intersect(
+            get_term_children( $term->term_id, 'product_cat' ),
+            $all_ids
+        );
+        if ( empty( $children_in_assigned ) ) {
+            $leaf_ids[] = $term->term_id;
+        }
+    }
+    $term_ids = ! empty( $leaf_ids ) ? $leaf_ids : $all_ids;
+
+    $query_args = array(
         'post_type'      => 'product',
         'posts_per_page' => 4,
         'post__not_in'   => array( $product->get_id() ),
         'tax_query'      => array( array(
-            'taxonomy' => 'product_cat',
-            'field'    => 'term_id',
-            'terms'    => wp_list_pluck( $terms, 'term_id' ),
+            'taxonomy'         => 'product_cat',
+            'field'            => 'term_id',
+            'terms'            => $term_ids,
+            'include_children' => false,
         ) ),
         'orderby'        => 'rand',
         'post_status'    => 'publish',
-    ) );
+    );
+
+    $related = new WP_Query( $query_args );
+
+    // Fallback: mở rộng về toàn bộ danh mục nếu danh mục lá không có kết quả
+    if ( ! $related->have_posts() && $term_ids !== $all_ids ) {
+        $query_args['tax_query'][0]['terms']            = $all_ids;
+        $query_args['tax_query'][0]['include_children'] = true;
+        $related = new WP_Query( $query_args );
+    }
 
     if ( ! $related->have_posts() ) return;
     ?>
     <section class="saltlux-related-products">
-        <h2 class="saltlux-related-heading"><?php esc_html_e( 'Sản phẩm tương tự', 'saltlux' ); ?></h2>
+        <h2 class="saltlux-related-heading"><?php esc_html_e( 'Sản phẩm liên quan', 'saltlux' ); ?></h2>
         <ul class="products columns-4">
             <?php
             while ( $related->have_posts() ) {
                 $related->the_post();
+                $GLOBALS['product'] = wc_get_product( get_the_ID() );
                 wc_get_template_part( 'content', 'product' );
             }
             wp_reset_postdata();
