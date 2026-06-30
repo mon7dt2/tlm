@@ -2648,6 +2648,12 @@ p.wll-preview-point_for_purchase-description.text-sm.font-normal.text-light {
     color: #cc0000;
 }
 
+.sv2-card__new {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .sv2-shop-seo {
     margin-top: 48px;
     padding-top: 32px;

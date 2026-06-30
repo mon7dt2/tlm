@@ -15,7 +15,10 @@
       "Bash(php -l inc/post-product.php)",
       "Bash(php -l inc/single-post.php)",
       "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\code\\\\php\\\\tlm' -Recurse -Directory | Select-Object -ExpandProperty Name\")",
-      "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\code\\\\php' -Directory | Select-Object -ExpandProperty Name | head -20\")"
+      "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\code\\\\php' -Directory | Select-Object -ExpandProperty Name | head -20\")",
+      "Bash(echo \"=== git history for sv2-card ===\"; git log --oneline -S \"sv2-card__tagline\" -- . 2>/dev/null | head; echo \"=== all tracked files ===\"; git ls-files | head -50; echo \"=== search parent dirs for plugin rendering sv2-card ===\"; ls -la ../ 2>/dev/null)",
+      "Bash(xargs grep -ln \"sv2-card\\\\|loop/title\\\\|content-product\")",
+      "Bash(php -l inc/product-archive.php)"
     ]
   }
 }
