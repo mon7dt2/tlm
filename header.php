@@ -40,6 +40,7 @@ foreach ( $_mega_top as $_top ) {
 
     $_nav_data[] = [
         'id'       => 'cat-' . $_top->term_id,
+        'term_id'  => $_top->term_id,
         'label'    => $_top->name,
         'url'      => get_term_link( $_top ),
         'wc_subs'  => $_subs,
@@ -256,30 +257,31 @@ if ( ! empty( $_promo_slides ) ) :
                      id="sl-panel-<?php echo esc_attr( $entry['id'] ); ?>">
 
                     <div class="sl-mega-panel-inner">
-                        <div class="sl-mega-subs">
-                            <a class="sl-mega-sub sl-mega-sub--all"
-                               href="<?php echo esc_url( $entry['url'] ); ?>">
-                                Tất cả <?php echo esc_html( $entry['label'] ); ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2.5"
-                                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <line x1="5" y1="12" x2="19" y2="12"/>
-                                    <polyline points="12 5 19 12 12 19"/>
-                                </svg>
-                            </a>
 
+                        <a class="sl-mega-sub--all"
+                           href="<?php echo esc_url( $entry['url'] ); ?>">
+                            Tất cả <?php echo esc_html( $entry['label'] ); ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.5"
+                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+
+                        <div class="sl-mega-subs">
                             <?php if ( ! empty( $entry['wc_subs'] ) ) :
-                                // Product category: show WC subcategories with thumbnails
+                                // Product category: show WC subcategories — name on top, large image below
                                 foreach ( $entry['wc_subs'] as $_sub ) :
                                     $_sub_thumb_id = get_term_meta( $_sub->term_id, 'thumbnail_id', true );
-                                    $_sub_img      = $_sub_thumb_id ? wp_get_attachment_image( $_sub_thumb_id, [120, 120], false, ['alt' => esc_attr( $_sub->name ), 'loading' => 'lazy'] ) : '';
+                                    $_sub_img      = $_sub_thumb_id ? wp_get_attachment_image( $_sub_thumb_id, 'medium', false, ['alt' => esc_attr( $_sub->name ), 'loading' => 'lazy'] ) : '';
                             ?>
                             <a class="sl-mega-sub<?php echo $_sub_img ? ' sl-mega-sub--has-img' : ''; ?>"
                                href="<?php echo esc_url( get_term_link( $_sub ) ); ?>">
+                                <span class="sl-mega-sub-name"><?php echo esc_html( $_sub->name ); ?></span>
                                 <?php if ( $_sub_img ) : ?>
                                 <div class="sl-mega-sub-img"><?php echo $_sub_img; ?></div>
                                 <?php endif; ?>
-                                <span class="sl-mega-sub-name"><?php echo esc_html( $_sub->name ); ?></span>
                             </a>
                             <?php endforeach;
                             else :
@@ -292,6 +294,27 @@ if ( ! empty( $_promo_slides ) ) :
                             </a>
                             <?php endforeach; endif; ?>
                         </div>
+
+                        <?php
+                        // ── Cấp 3: link tĩnh (grid 3 cột), đọc từ danh mục cha ──
+                        $_quick_links = ( ! empty( $entry['term_id'] ) && function_exists( 'get_field' ) )
+                            ? get_field( 'mega_sublinks', 'product_cat_' . $entry['term_id'] )
+                            : [];
+                        if ( ! empty( $_quick_links ) ) : ?>
+                        <ul class="sl-mega-links" role="list">
+                            <?php foreach ( $_quick_links as $_ql ) :
+                                $_ql_label = ! empty( $_ql['sublink_label'] ) ? $_ql['sublink_label'] : '';
+                                $_ql_url   = ! empty( $_ql['sublink_url'] )   ? $_ql['sublink_url']   : '';
+                                if ( ! $_ql_label || ! $_ql_url ) continue;
+                            ?>
+                            <li>
+                                <a class="sl-mega-link" href="<?php echo esc_url( $_ql_url ); ?>">
+                                    <?php echo esc_html( $_ql_label ); ?>
+                                </a>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
 
                     </div>
 

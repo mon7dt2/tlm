@@ -555,3 +555,66 @@ add_action( 'init', function () {
 foreach ( [ 'created_product_cat', 'edited_product_cat', 'delete_product_cat' ] as $sv2_hook ) {
     add_action( $sv2_hook, static function () { flush_rewrite_rules( false ); } );
 }
+
+// ---------------------------------------------------------------------------
+// Mega menu — cấp 3 link tĩnh cho mỗi danh mục cha (tab).
+// ACF repeater gắn vào taxonomy product_cat; chỉ ĐỌC từ danh mục CẤP 1 trong
+// header.php để render lưới link (grid 3 cột) dưới hàng card cấp 2.
+// ---------------------------------------------------------------------------
+add_action( 'acf/include_fields', function () {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+    acf_add_local_field_group( array(
+        'key'    => 'group_mega_sublinks',
+        'title'  => 'Mega menu — link nhanh (dưới hàng danh mục)',
+        'fields' => array(
+            array(
+                'key'          => 'field_mega_sublinks',
+                'label'        => 'Link nhanh',
+                'name'         => 'mega_sublinks',
+                'type'         => 'repeater',
+                'instructions' => 'Chỉ áp dụng cho danh mục CẤP 1 (mục hiện thành tab trong mega menu). Các link này hiển thị thành lưới 3 cột bên dưới hàng danh mục con.',
+                'layout'       => 'table',
+                'button_label' => 'Thêm link',
+                'sub_fields'   => array(
+                    array(
+                        'key'      => 'field_mega_sublink_label',
+                        'label'    => 'Chữ hiển thị',
+                        'name'     => 'sublink_label',
+                        'type'     => 'text',
+                        'required' => 1,
+                        'wrapper'  => array( 'width' => '40' ),
+                    ),
+                    array(
+                        'key'            => 'field_mega_sublink_url',
+                        'label'          => 'Đích đến',
+                        'name'           => 'sublink_url',
+                        'type'           => 'page_link',
+                        'instructions'   => 'Chọn page/bài viết hoặc nhập URL.',
+                        'required'       => 1,
+                        'post_type'      => array(),
+                        'taxonomy'       => array(),
+                        'allow_null'     => 0,
+                        'allow_archives' => 1,
+                        'multiple'       => 0,
+                        'wrapper'        => array( 'width' => '60' ),
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'taxonomy',
+                    'operator' => '==',
+                    'value'    => 'product_cat',
+                ),
+            ),
+        ),
+        'menu_order'      => 5,
+        'position'        => 'normal',
+        'style'           => 'default',
+        'label_placement' => 'top',
+    ) );
+} );
