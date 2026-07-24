@@ -222,13 +222,18 @@ if ( ! empty( $_promo_slides ) ) :
     <nav class="sl-mega" id="sl-mega" aria-hidden="true" aria-label="Danh mục sản phẩm">
         <div class="sl-mega-inner">
 
-            <!-- Left: category tabs (driven by Primary menu) -->
+            <!-- Category tabs + panel (panel nằm trong <li> để mobile xổ accordion) -->
             <ul class="sl-mega-nav" role="list">
                 <?php foreach ( $_nav_data as $i => $entry ) :
                     $has_panel = ! empty( $entry['wc_subs'] ) || ! empty( $entry['children'] );
                 ?>
                 <li>
-                    <?php if ( $has_panel ) : ?>
+                    <?php if ( ! $has_panel ) : ?>
+                    <a class="sl-mega-tab sl-mega-tab--direct"
+                       href="<?php echo esc_url( $entry['url'] ); ?>">
+                        <?php echo esc_html( $entry['label'] ); ?>
+                    </a>
+                    <?php else : ?>
                     <button class="sl-mega-tab<?php echo $i === 0 ? ' is-active' : ''; ?>"
                             data-panel="sl-panel-<?php echo esc_attr( $entry['id'] ); ?>">
                         <?php echo esc_html( $entry['label'] ); ?>
@@ -238,89 +243,77 @@ if ( ! empty( $_promo_slides ) ) :
                             <polyline points="9 18 15 12 9 6"/>
                         </svg>
                     </button>
-                    <?php else : ?>
-                    <a class="sl-mega-tab sl-mega-tab--direct"
-                       href="<?php echo esc_url( $entry['url'] ); ?>">
-                        <?php echo esc_html( $entry['label'] ); ?>
-                    </a>
+
+                    <div class="sl-mega-panel<?php echo $i === 0 ? ' is-active' : ''; ?>"
+                         id="sl-panel-<?php echo esc_attr( $entry['id'] ); ?>">
+
+                        <div class="sl-mega-panel-inner">
+
+                            <a class="sl-mega-sub--all"
+                               href="<?php echo esc_url( $entry['url'] ); ?>">
+                                Tất cả <?php echo esc_html( $entry['label'] ); ?>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2.5"
+                                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                    <polyline points="12 5 19 12 12 19"/>
+                                </svg>
+                            </a>
+
+                            <div class="sl-mega-subs">
+                                <?php if ( ! empty( $entry['wc_subs'] ) ) :
+                                    // Product category: show WC subcategories — name on top, large image below
+                                    foreach ( $entry['wc_subs'] as $_sub ) :
+                                        $_sub_thumb_id = get_term_meta( $_sub->term_id, 'thumbnail_id', true );
+                                        $_sub_img      = $_sub_thumb_id ? wp_get_attachment_image( $_sub_thumb_id, 'medium', false, ['alt' => esc_attr( $_sub->name ), 'loading' => 'lazy'] ) : '';
+                                ?>
+                                <a class="sl-mega-sub<?php echo $_sub_img ? ' sl-mega-sub--has-img' : ''; ?>"
+                                   href="<?php echo esc_url( get_term_link( $_sub ) ); ?>">
+                                    <span class="sl-mega-sub-name"><?php echo esc_html( $_sub->name ); ?></span>
+                                    <?php if ( $_sub_img ) : ?>
+                                    <div class="sl-mega-sub-img"><?php echo $_sub_img; ?></div>
+                                    <?php endif; ?>
+                                </a>
+                                <?php endforeach;
+                                else :
+                                    // Non-category item: use explicit menu children as links
+                                    foreach ( $entry['children'] as $_child ) :
+                                ?>
+                                <a class="sl-mega-sub"
+                                   href="<?php echo esc_url( $_child->url ); ?>">
+                                    <span class="sl-mega-sub-name"><?php echo esc_html( $_child->title ); ?></span>
+                                </a>
+                                <?php endforeach; endif; ?>
+                            </div>
+
+                            <?php
+                            // ── Cấp 3: link tĩnh (grid 3 cột), đọc từ danh mục cha ──
+                            $_quick_links = ( ! empty( $entry['term_id'] ) && function_exists( 'get_field' ) )
+                                ? get_field( 'mega_sublinks', 'product_cat_' . $entry['term_id'] )
+                                : [];
+                            if ( ! empty( $_quick_links ) ) : ?>
+                            <ul class="sl-mega-links" role="list">
+                                <?php foreach ( $_quick_links as $_ql ) :
+                                    $_ql_label = ! empty( $_ql['sublink_label'] ) ? $_ql['sublink_label'] : '';
+                                    $_ql_url   = ! empty( $_ql['sublink_url'] )   ? $_ql['sublink_url']   : '';
+                                    if ( ! $_ql_label || ! $_ql_url ) continue;
+                                ?>
+                                <li>
+                                    <a class="sl-mega-link" href="<?php echo esc_url( $_ql_url ); ?>">
+                                        <?php echo esc_html( $_ql_label ); ?>
+                                    </a>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php endif; ?>
+
+                        </div>
+
+                    </div>
                     <?php endif; ?>
                 </li>
                 <?php endforeach; ?>
             </ul>
-
-            <!-- Right: subcategory panels (driven by Primary menu) -->
-            <div class="sl-mega-panels">
-                <?php foreach ( $_nav_data as $i => $entry ) :
-                    if ( empty( $entry['wc_subs'] ) && empty( $entry['children'] ) ) continue;
-                ?>
-                <div class="sl-mega-panel<?php echo $i === 0 ? ' is-active' : ''; ?>"
-                     id="sl-panel-<?php echo esc_attr( $entry['id'] ); ?>">
-
-                    <div class="sl-mega-panel-inner">
-
-                        <a class="sl-mega-sub--all"
-                           href="<?php echo esc_url( $entry['url'] ); ?>">
-                            Tất cả <?php echo esc_html( $entry['label'] ); ?>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2.5"
-                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                                <polyline points="12 5 19 12 12 19"/>
-                            </svg>
-                        </a>
-
-                        <div class="sl-mega-subs">
-                            <?php if ( ! empty( $entry['wc_subs'] ) ) :
-                                // Product category: show WC subcategories — name on top, large image below
-                                foreach ( $entry['wc_subs'] as $_sub ) :
-                                    $_sub_thumb_id = get_term_meta( $_sub->term_id, 'thumbnail_id', true );
-                                    $_sub_img      = $_sub_thumb_id ? wp_get_attachment_image( $_sub_thumb_id, 'medium', false, ['alt' => esc_attr( $_sub->name ), 'loading' => 'lazy'] ) : '';
-                            ?>
-                            <a class="sl-mega-sub<?php echo $_sub_img ? ' sl-mega-sub--has-img' : ''; ?>"
-                               href="<?php echo esc_url( get_term_link( $_sub ) ); ?>">
-                                <span class="sl-mega-sub-name"><?php echo esc_html( $_sub->name ); ?></span>
-                                <?php if ( $_sub_img ) : ?>
-                                <div class="sl-mega-sub-img"><?php echo $_sub_img; ?></div>
-                                <?php endif; ?>
-                            </a>
-                            <?php endforeach;
-                            else :
-                                // Non-category item: use explicit menu children as links
-                                foreach ( $entry['children'] as $_child ) :
-                            ?>
-                            <a class="sl-mega-sub"
-                               href="<?php echo esc_url( $_child->url ); ?>">
-                                <span class="sl-mega-sub-name"><?php echo esc_html( $_child->title ); ?></span>
-                            </a>
-                            <?php endforeach; endif; ?>
-                        </div>
-
-                        <?php
-                        // ── Cấp 3: link tĩnh (grid 3 cột), đọc từ danh mục cha ──
-                        $_quick_links = ( ! empty( $entry['term_id'] ) && function_exists( 'get_field' ) )
-                            ? get_field( 'mega_sublinks', 'product_cat_' . $entry['term_id'] )
-                            : [];
-                        if ( ! empty( $_quick_links ) ) : ?>
-                        <ul class="sl-mega-links" role="list">
-                            <?php foreach ( $_quick_links as $_ql ) :
-                                $_ql_label = ! empty( $_ql['sublink_label'] ) ? $_ql['sublink_label'] : '';
-                                $_ql_url   = ! empty( $_ql['sublink_url'] )   ? $_ql['sublink_url']   : '';
-                                if ( ! $_ql_label || ! $_ql_url ) continue;
-                            ?>
-                            <li>
-                                <a class="sl-mega-link" href="<?php echo esc_url( $_ql_url ); ?>">
-                                    <?php echo esc_html( $_ql_label ); ?>
-                                </a>
-                            </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <?php endif; ?>
-
-                    </div>
-
-                </div>
-                <?php endforeach; ?>
-            </div>
 
         </div><!-- /.sl-mega-inner -->
     </nav><!-- /.sl-mega -->

@@ -23,7 +23,8 @@
       "Bash(git check-ignore *)",
       "Bash(php -l header.php)",
       "Bash(php -l inc/mega-sublinks.php)",
-      "Bash(php -l inc/functions.php)"
+      "Bash(php -l inc/functions.php)",
+      "Bash(grep -n '$ver\\\\|get\\( '\\\\''Version'\\\\'' \\)' functions.php)"
     ]
   }
 }
